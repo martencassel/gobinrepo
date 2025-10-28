@@ -239,3 +239,58 @@ func copyForwardHeaders(dst, src http.Header) {
 		}
 	}
 }
+
+// StreamAndCacheWithRetry streams a blob to the client and cache,
+// retrying once if the transfer aborts mid‑stream.
+func (c *RegistryClient) StreamAndCacheWithRetry(
+	ctx context.Context,
+	w http.ResponseWriter,
+	repo, digest string,
+	hdr http.Header,
+	cacheWriter io.Writer,
+	maxRetries int,
+) error {
+	var lastErr error
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		// Fresh fetch each attempt
+		resp, err := c.FetchBlob(ctx, repo, digest, hdr)
+		if err != nil {
+			lastErr = err
+			continue
+		}
+		if resp.StatusCode != http.StatusOK {
+			lastErr = fmt.Errorf("blob fetch failed (%s): %s", digest, resp.Status)
+			resp.Body.Close()
+			continue
+		}
+
+		// Copy headers/status
+		for k, vv := range resp.Header {
+			for _, v := range vv {
+				w.Header().Add(k, v)
+			}
+		}
+		w.WriteHeader(resp.StatusCode)
+
+		// Stream to client + cache
+		tee := io.TeeReader(resp.Body, cacheWriter)
+		_, err = io.Copy(w, tee)
+		resp.Body.Close()
+
+		if err != nil {
+			// aborted transfer, clean up cacheWriter if it's a file
+			if f, ok := cacheWriter.(interface{ Close() error }); ok {
+				f.Close()
+			}
+			if attempt < maxRetries {
+				log.Warnf("transfer aborted for %s, retrying (%d/%d)", digest, attempt+1, maxRetries)
+				continue
+			}
+			lastErr = fmt.Errorf("transfer aborted after %d retries: %w", maxRetries, err)
+		} else {
+			// success
+			return nil
+		}
+	}
+	return lastErr
+}
