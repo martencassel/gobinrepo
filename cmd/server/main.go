@@ -51,7 +51,7 @@ func buildRouter() (*gin.Engine, error) {
 	}
 	mw := mw.NewRepoKeyMiddleware()
 	r.Use(mw.Middleware())
-	docker := remote.NewDockerRemoteHandler(blobs, configStore)
+	docker := remote.NewDockerRemoteHandler(blobs, configStore, true)
 	docker.RegisterRoutes(r)
 	return r, nil
 }

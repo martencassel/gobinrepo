@@ -12,6 +12,7 @@ import (
 	"github.com/martencassel/gobinrepo/internal/mw"
 	"github.com/martencassel/gobinrepo/internal/util/blobs"
 	"github.com/martencassel/gobinrepo/internal/util/oci"
+	"github.com/martencassel/gobinrepo/internal/util/trace"
 	digest "github.com/opencontainers/go-digest"
 	log "github.com/sirupsen/logrus"
 )
@@ -19,12 +20,15 @@ import (
 type DockerRemoteHandler struct {
 	blobs blobs.BlobStore
 	store *configstore.RepoConfigStore
+	*configstore.RepoConfigStore
+	traceEnable bool
 }
 
-func NewDockerRemoteHandler(blobs blobs.BlobStore, store *configstore.RepoConfigStore) *DockerRemoteHandler {
+func NewDockerRemoteHandler(blobs blobs.BlobStore, store *configstore.RepoConfigStore, traceEnable bool) *DockerRemoteHandler {
 	return &DockerRemoteHandler{
-		blobs: blobs,
-		store: store,
+		blobs:       blobs,
+		store:       store,
+		traceEnable: traceEnable,
 	}
 }
 
@@ -95,8 +99,7 @@ func (h *DockerRemoteHandler) GetManifest(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid OCI URL"})
 		return
 	}
-	client := oci.NewRegistryClient(cfg.RemoteURL, oci.NewTokenRoundTripper(true, nil))
-
+	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable)
 	normalizedName := normalizeName(cfg.RemoteURL, url.Name.Rest())
 
 	resp, err := client.GetManifest(c.Request.Context(), normalizedName, url.Reference.String(), c.Request.Header)
@@ -209,9 +212,7 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 		}).Info("Blob served from local store")
 		return
 	}
-
-	// Otherwise fetch from upstream
-	client := oci.NewRegistryClient(cfg.RemoteURL, oci.NewTokenRoundTripper(true, nil))
+	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable)
 
 	normalizedName := normalizeName(cfg.RemoteURL, req.URL.Name.Rest())
 
@@ -277,4 +278,28 @@ func normalizeName(remoteURL, name string) string {
 		return "library/" + name
 	}
 	return name
+}
+
+func newDefaultTransport() *http.Transport {
+	tr := http.DefaultTransport.(*http.Transport).Clone()
+	tr.MaxIdleConns = 500
+	tr.MaxIdleConnsPerHost = 500
+	tr.IdleConnTimeout = 90 * time.Second
+	tr.TLSHandshakeTimeout = 10 * time.Second
+	tr.ExpectContinueTimeout = 1 * time.Second
+	tr.ResponseHeaderTimeout = 15 * time.Second
+	tr.DisableCompression = true // blobs are already compressed
+	return tr
+}
+
+func newTracedRegistryClient(remoteURL string, traceUpstream bool) *oci.RegistryClient {
+	base := newDefaultTransport()
+	var tokenBase http.RoundTripper = base
+	tokenRT := oci.NewTokenRoundTripper(true, oci.WithTransport(tokenBase))
+	// Optionally wrap with upstream tracer
+	var outer http.RoundTripper = tokenRT
+	if traceUpstream {
+		outer = &trace.TracingRoundTripper{Base: tokenRT}
+	}
+	return oci.NewRegistryClient(remoteURL, outer)
 }
