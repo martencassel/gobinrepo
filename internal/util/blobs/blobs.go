@@ -166,12 +166,18 @@ func (w *atomicWriter) Write(p []byte) (int, error) {
 func (w *atomicWriter) Close() error {
 	err := w.File.Close()
 	if err != nil {
-		os.Remove(w.tmpPath)
+		err = os.Remove(w.tmpPath)
+		if err != nil {
+			return err
+		}
 		return err
 	}
 	got := digest.NewDigest(digest.SHA256, w.h)
 	if got != w.expected {
-		os.Remove(w.tmpPath)
+		err = os.Remove(w.tmpPath)
+		if err != nil {
+			return err
+		}
 		return fmt.Errorf("digest mismatch: got %s, want %s", got, w.expected)
 	}
 	return os.Rename(w.tmpPath, w.finalPath)
