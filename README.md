@@ -14,6 +14,7 @@ The initial proof of concept provided:
 - Caches blobs under `/tmp/blobs/`.
 - Serves cached content on repeated pulls.
 - Demonstrates integration with `podman` as a client.
+- Authenticate to private registries such as docker.io subscription
 
 ---
 
