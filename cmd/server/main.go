@@ -35,6 +35,43 @@ func buildConfigStore() (*configstore.RepoConfigStore, error) {
 		RepoKey:   "quayio",
 		RemoteURL: "https://quay.io",
 	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "ghcr",
+		RemoteURL: "https://ghcr.io",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "gcr",
+		RemoteURL: "https://gcr.io",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "mcr",
+		RemoteURL: "https://mcr.microsoft.com",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "publicecr",
+		RemoteURL: "https://public.ecr.aws",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "icr",
+		RemoteURL: "https://icr.io",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "ocir",
+		RemoteURL: "https://container-registry.oracle.com",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "nvcr",
+		RemoteURL: "https://nvcr.io",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "gitlab",
+		RemoteURL: "https://registry.gitlab.com",
+	})
+
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "redhat",
+		RemoteURL: "registry.access.redhat.com",
+	})
 	return store, nil
 }
 

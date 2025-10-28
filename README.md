@@ -63,3 +63,58 @@ time podman image pull localhost:5000/quayio/argoproj/argocd:latest --tls-verify
 
 # Second pull: served from local cache (much faster)
 time podman image pull localhost:5000/quayio/argoproj/argocd:latest --tls-verify=false
+```
+
+---
+
+## 🌍 Additional Supported Registries
+
+Beyond Docker Hub and Quay.io, `gobinrepo` now supports pulling and caching from a wide range of registries.
+The following examples demonstrate repeated pulls (first from remote, then from cache):
+
+```bash
+# GitHub Container Registry
+podman rmi localhost:5000/ghcr/github/super-linter:slim-v5.0.0 || true
+time podman image pull localhost:5000/ghcr/github/super-linter:slim-v5.0.0 --tls-verify=false
+time podman image pull localhost:5000/ghcr/github/super-linter:slim-v5.0.0 --tls-verify=false
+
+# Google Container Registry (Distroless)
+podman rmi localhost:5000/gcr/distroless/static:latest || true
+time podman image pull localhost:5000/gcr/distroless/static:latest --tls-verify=false
+time podman image pull localhost:5000/gcr/distroless/static:latest --tls-verify=false
+
+# Microsoft Container Registry
+podman rmi localhost:5000/mcr.microsoft.com/powershell:latest || true
+time podman image pull localhost:5000/mcr/powershell:latest --tls-verify=false
+time podman image pull localhost:5000/mcr/powershell:latest --tls-verify=false
+
+# AWS Public ECR
+podman rmi localhost:5000/publicecr/nginx/nginx:latest || true
+time podman image pull localhost:5000/publicecr/nginx/nginx:latest --tls-verify=false
+time podman image pull localhost:5000/publicecr/nginx/nginx:latest --tls-verify=false
+
+# IBM Cloud Container Registry
+podman rmi localhost:5000/icr/appcafe/open-liberty:latest || true
+time podman pull localhost:5000/icr/appcafe/open-liberty:latest --tls-verify=false
+time podman pull localhost:5000/icr/appcafe/open-liberty:latest --tls-verify=false
+
+# Oracle Cloud Infrastructure Registry
+podman rmi localhost:5000/ocir/os/oraclelinux:8-slim || true
+time podman pull localhost:5000/ocir/os/oraclelinux:8-slim --tls-verify=false
+time podman pull localhost:5000/ocir/os/oraclelinux:8-slim --tls-verify=false
+
+# NVIDIA NGC
+podman rmi localhost:5000/nvcr/nvidia/cuda:12.2.0-base-ubuntu22.04 || true
+time podman pull localhost:5000/nvcr/nvidia/cuda:12.2.0-base-ubuntu22.04 --tls-verify=false
+time podman pull localhost:5000/nvcr/nvidia/cuda:12.2.0-base-ubuntu22.04 --tls-verify=false
+
+# GitLab Container Registry
+podman rmi localhost:5000/gitlab/gitlab-org/gitlab-runner:alpine || true
+time podman pull localhost:5000/gitlab/gitlab-org/gitlab-runner:alpine --tls-verify=false
+time podman pull localhost:5000/gitlab/gitlab-org/gitlab-runner:alpine --tls-verify=false
+
+# Red Hat Container Catalog
+podman rmi localhost:5000/redhat/ubi8/ubi-minimal:latest || true
+time podman pull localhost:5000/redhat/ubi8/ubi-minimal:latest --tls-verify=false
+time podman pull localhost:5000/redhat/ubi8/ubi-minimal:latest --tls-verify=false
+```
