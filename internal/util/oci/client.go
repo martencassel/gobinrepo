@@ -3,10 +3,11 @@ package oci
 import (
 	"context"
 	"fmt"
-	"internal/singleflight"
 	"io"
 	"net/http"
 	"strings"
+
+	"golang.org/x/sync/singleflight"
 
 	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 	log "github.com/sirupsen/logrus"
@@ -261,7 +262,10 @@ func (c *RegistryClient) StreamAndCacheWithRetry(
 		}
 		if resp.StatusCode != http.StatusOK {
 			lastErr = fmt.Errorf("blob fetch failed (%s): %s", digest, resp.Status)
-			resp.Body.Close()
+			err := resp.Body.Close()
+			if err != nil {
+				log.Warnf("failed to close response body: %v", err)
+			}
 			continue
 		}
 
@@ -276,12 +280,18 @@ func (c *RegistryClient) StreamAndCacheWithRetry(
 		// Stream to client + cache
 		tee := io.TeeReader(resp.Body, cacheWriter)
 		_, err = io.Copy(w, tee)
-		resp.Body.Close()
-
+		if err := resp.Body.Close(); err != nil {
+			log.Warnf("failed to close response body: %v", err)
+			// If we failed to close the response body, we should not continue
+			return err
+		}
 		if err != nil {
 			// aborted transfer, clean up cacheWriter if it's a file
 			if f, ok := cacheWriter.(interface{ Close() error }); ok {
-				f.Close()
+				err = f.Close()
+				if err != nil {
+					log.Warnf("failed to close cache writer: %v", err)
+				}
 			}
 			if attempt < maxRetries {
 				log.Warnf("transfer aborted for %s, retrying (%d/%d)", digest, attempt+1, maxRetries)
