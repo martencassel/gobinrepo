@@ -1,13 +1,20 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/martencassel/gobinrepo/internal/configstore"
 	"github.com/martencassel/gobinrepo/internal/mw"
 	"github.com/martencassel/gobinrepo/internal/remote"
 	"github.com/martencassel/gobinrepo/internal/util/blobs"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -19,8 +26,30 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	if err := router.Run(*httpListenAddr); err != nil {
-		panic(err)
+	srv := &http.Server{
+		Addr:    *httpListenAddr,
+		Handler: router,
+	}
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			panic(err)
+		}
+	}()
+
+	// Wait for signal (SIGINT/SIGTERM)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	log.Infof("Shutting down server...")
+
+	// Graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Errorf("Server forced to shutdown: %v", err)
+	} else {
+		log.Infof("Server exiting")
 	}
 }
 

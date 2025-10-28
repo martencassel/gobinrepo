@@ -2,8 +2,10 @@ package blobs
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
 	"fmt"
+	"hash"
 	"io"
 	"os"
 	"path/filepath"
@@ -127,4 +129,50 @@ func (fs *BlobStoreFS) Writer(ctx context.Context, expected digest.Digest) (io.W
 		dig:    digest.Canonical.Digester(),
 		expect: expected,
 	}, nil
+}
+
+func (s *BlobStoreFS) WriterAtomic(ctx context.Context, dgst digest.Digest) (io.WriteCloser, error) {
+	tmpPath := filepath.Join(s.basePath, dgst.Encoded()+".partial")
+	finalPath := filepath.Join(s.basePath, "sha256", dgst.Encoded())
+
+	f, err := os.Create(tmpPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return &atomicWriter{
+		File:      f,
+		tmpPath:   tmpPath,
+		finalPath: finalPath,
+		expected:  dgst,
+	}, nil
+}
+
+type atomicWriter struct {
+	*os.File
+	tmpPath, finalPath string
+	expected           digest.Digest
+	h                  hash.Hash
+}
+
+func (w *atomicWriter) Write(p []byte) (int, error) {
+	if w.h == nil {
+		w.h = sha256.New()
+	}
+	w.h.Write(p)
+	return w.File.Write(p)
+}
+
+func (w *atomicWriter) Close() error {
+	err := w.File.Close()
+	if err != nil {
+		os.Remove(w.tmpPath)
+		return err
+	}
+	got := digest.NewDigest(digest.SHA256, w.h)
+	if got != w.expected {
+		os.Remove(w.tmpPath)
+		return fmt.Errorf("digest mismatch: got %s, want %s", got, w.expected)
+	}
+	return os.Rename(w.tmpPath, w.finalPath)
 }

@@ -2,6 +2,7 @@ package remote
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -240,7 +241,13 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 
 	written, err := io.Copy(io.MultiWriter(req.Gin.Writer, writer), resp.Body)
 	if err != nil {
-		req.Gin.JSON(http.StatusInternalServerError, gin.H{"error": "failed to stream blob"})
+		if errors.Is(req.Ctx.Err(), context.Canceled) {
+			req.Logger.WithFields(log.Fields{
+				"digest": req.Digest,
+			}).Warn("Streaming aborted due to server shutdown or client disconnect")
+		} else {
+			req.Gin.JSON(http.StatusInternalServerError, gin.H{"error": "failed to stream blob"})
+		}
 		return
 	}
 
