@@ -47,9 +47,10 @@ time podman pull localhost:5000/redhat/ubi8/ubi-minimal:latest --tls-verify=fals
 
 # Testing consistency during intterruption of pull
 # podman rmi localhost:5000/dockerhub/postgres:latest||true
+#
 # 1. Launch server
 # 2. Start pull: podman image pull  localhost:5000/dockerhub/postgres:latest  --tls-verify=false
-# 3. During pull, kill server, using CTRL+C
+# 3. During pull, kill server or client prematurely using CTRL+C
 # 4. Restart server
 # 5. Re-run pull command, it should return an error about mismatched digest and not start over
 #
