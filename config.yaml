@@ -1,0 +1,37 @@
+# gobinrepo.yaml
+
+# Global settings
+server:
+  listen: ":5000"
+
+cache:
+  path: /tmp/gobinrepo/cache
+
+# Define individual remotes
+remotes:
+  dockerhub:
+    remote_url: https://registry-1.docker.io
+    username: ${DOCKERHUB_USERNAME}   # support env substitution
+    password: ${DOCKERHUB_PASSWORD}   # support env substitution
+  quayio:
+    remote_url: https://quay.io
+  ghcr:
+    remote_url: https://ghcr.io
+  gcr:
+    remote_url: https://gcr.io
+  mcr:
+    remote_url: https://mcr.microsoft.com
+  publicecr:
+    remote_url: https://public.ecr.aws
+  icr:
+    remote_url: https://icr.io
+  ocir:
+    remote_url: https://container-registry.oracle.com
+  nvcr:
+    remote_url: https://nvcr.io
+  gitlab:
+    remote_url: https://registry.gitlab.com
+  redhat:
+    remote_url: registry.access.redhat.com
+---
+

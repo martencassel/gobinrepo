@@ -29,6 +29,10 @@ type BlobStore interface {
 	// Writer returns a WriteCloser that streams into the blob store
 	// and verifies the digest on Close.
 	Writer(ctx context.Context, expected digest.Digest) (io.WriteCloser, error)
+
+	// WriterAtomic returns a WriteCloser that writes to a temporary location
+	// and moves the blob into place on Close, verifying the digest.
+	WriterAtomic(ctx context.Context, dgst digest.Digest) (io.WriteCloser, error)
 }
 
 // BlobStoreFS implements BlobStore on the local filesystem.
@@ -132,8 +136,13 @@ func (fs *BlobStoreFS) Writer(ctx context.Context, expected digest.Digest) (io.W
 }
 
 func (s *BlobStoreFS) WriterAtomic(ctx context.Context, dgst digest.Digest) (io.WriteCloser, error) {
+	// Place temp file in basePath, not in final subdir
 	tmpPath := filepath.Join(s.basePath, dgst.Encoded()+".partial")
-	finalPath := filepath.Join(s.basePath, "sha256", dgst.Encoded())
+
+	finalPath, err := s.blobPath(dgst)
+	if err != nil {
+		return nil, err
+	}
 
 	f, err := os.Create(tmpPath)
 	if err != nil {
@@ -145,6 +154,7 @@ func (s *BlobStoreFS) WriterAtomic(ctx context.Context, dgst digest.Digest) (io.
 		tmpPath:   tmpPath,
 		finalPath: finalPath,
 		expected:  dgst,
+		h:         sha256.New(),
 	}, nil
 }
 
@@ -156,29 +166,36 @@ type atomicWriter struct {
 }
 
 func (w *atomicWriter) Write(p []byte) (int, error) {
-	if w.h == nil {
-		w.h = sha256.New()
+	if _, err := w.h.Write(p); err != nil {
+		return 0, err
 	}
-	w.h.Write(p)
 	return w.File.Write(p)
 }
 
 func (w *atomicWriter) Close() error {
-	err := w.File.Close()
-	if err != nil {
-		err = os.Remove(w.tmpPath)
-		if err != nil {
-			return err
-		}
+	// Close underlying file first
+	if err := w.File.Close(); err != nil {
+		_ = os.Remove(w.tmpPath)
 		return err
 	}
+
+	// Verify digest
 	got := digest.NewDigest(digest.SHA256, w.h)
 	if got != w.expected {
-		err = os.Remove(w.tmpPath)
-		if err != nil {
-			return err
-		}
+		_ = os.Remove(w.tmpPath)
 		return fmt.Errorf("digest mismatch: got %s, want %s", got, w.expected)
 	}
-	return os.Rename(w.tmpPath, w.finalPath)
+
+	// Ensure final directory exists
+	if err := os.MkdirAll(filepath.Dir(w.finalPath), 0o755); err != nil {
+		_ = os.Remove(w.tmpPath)
+		return err
+	}
+
+	// Atomically promote .partial to final
+	if err := os.Rename(w.tmpPath, w.finalPath); err != nil {
+		_ = os.Remove(w.tmpPath)
+		return err
+	}
+	return nil
 }

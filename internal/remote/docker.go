@@ -90,7 +90,7 @@ func (h *DockerRemoteHandler) GetManifest(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "unknown repoKey: repository configuration not found"})
 		return
 	}
-	log.Infof("Using repo config: %+v", cfg)
+	log.Infof("Using repo config: %s", cfg.String())
 
 	reqURL := c.Request.URL.String()
 	log.Infof("Received request for manifest URL: %s", reqURL)
@@ -138,7 +138,7 @@ func (h *DockerRemoteHandler) GetBlob(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "unknown repoKey"})
 		return
 	}
-	log.Infof("Using repo config: %+v", cfg)
+	log.Infof("Using repo config: %s", cfg.String())
 
 	corrID, _ := c.Get(mw.CorrelationIDHeader)
 	ctx := c.Request.Context()
@@ -228,7 +228,7 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 		}
 	}()
 
-	writer, err := h.blobs.Writer(req.Ctx, req.Digest)
+	writer, err := h.blobs.WriterAtomic(req.Ctx, req.Digest)
 	if err != nil {
 		req.Gin.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create blob writer"})
 		return

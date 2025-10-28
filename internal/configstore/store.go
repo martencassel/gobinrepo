@@ -1,6 +1,9 @@
 package configstore
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 // RepoConfig represents a mapping from repoKey → remote registry URL.
 type RepoConfig struct {
@@ -8,6 +11,21 @@ type RepoConfig struct {
 	RemoteURL string `json:"remoteURL"`
 	Username  string `json:"username"`
 	Password  string `json:"password"`
+}
+
+func (c RepoConfig) String() string {
+	return fmt.Sprintf("URL=%s Username=%s Password=%s",
+		c.RemoteURL,
+		c.Username,
+		mask(c.Password),
+	)
+}
+
+func mask(s string) string {
+	if s == "" {
+		return "<empty>"
+	}
+	return "****"
 }
 
 // RepoConfigStore is an in-memory store for repo configurations.
