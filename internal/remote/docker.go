@@ -4,9 +4,11 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/martencassel/gobinrepo/internal/configstore"
 	"github.com/martencassel/gobinrepo/internal/mw"
 	"github.com/martencassel/gobinrepo/internal/util/blobs"
 	"github.com/martencassel/gobinrepo/internal/util/oci"
@@ -16,11 +18,13 @@ import (
 
 type DockerRemoteHandler struct {
 	blobs blobs.BlobStore
+	store *configstore.RepoConfigStore
 }
 
-func NewDockerRemoteHandler(blobs blobs.BlobStore) *DockerRemoteHandler {
+func NewDockerRemoteHandler(blobs blobs.BlobStore, store *configstore.RepoConfigStore) *DockerRemoteHandler {
 	return &DockerRemoteHandler{
 		blobs: blobs,
+		store: store,
 	}
 }
 
@@ -30,12 +34,59 @@ func (h *DockerRemoteHandler) RegisterRoutes(r *gin.Engine) {
 		c.Header("Docker-Distribution-API-Version", "registry/2.0")
 		c.Status(http.StatusOK)
 	})
-	r.GET("/v2/:repoKey/:name/manifests/:ref", h.GetManifest)
-	r.GET("/v2/:repoKey/:name/blobs/:digest", h.GetBlob)
+	// r.GET("/v2/:repoKey/*name/manifests/:ref", h.GetManifest)
+	// r.GET("/v2/:repoKey/*name/blobs/:digest", h.GetBlob)
+
+	r.GET("/v2/:repoKey/*path", h.handleV2)
+}
+
+func (h *DockerRemoteHandler) handleV2(c *gin.Context) {
+	repoKey := c.Param("repoKey")
+	rest := strings.TrimPrefix(c.Param("path"), "/")
+
+	switch {
+	case strings.Contains(rest, "/manifests/"):
+		parts := strings.SplitN(rest, "/manifests/", 2)
+		if len(parts) != 2 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid manifest path"})
+			return
+		}
+		h.GetManifestWithParams(c, repoKey, parts[0], parts[1])
+	case strings.Contains(rest, "/blobs/"):
+		parts := strings.SplitN(rest, "/blobs/", 2)
+		name, digest := parts[0], parts[1]
+		h.GetBlobWithParams(c, repoKey, name, digest)
+	default:
+		c.JSON(http.StatusNotFound, gin.H{"error": "unsupported v2 path"})
+	}
+}
+
+func (h *DockerRemoteHandler) GetManifestWithParams(c *gin.Context, repoKey, name, ref string) {
+	c.Set("RepoKey", repoKey)
+	c.Set("SubPath", name+"/manifests/"+ref)
+	h.GetManifest(c)
+}
+
+func (h *DockerRemoteHandler) GetBlobWithParams(c *gin.Context, repoKey, name, digest string) {
+	c.Set("RepoKey", repoKey)
+	c.Set("SubPath", name+"/blobs/"+digest)
+	h.GetBlob(c)
 }
 
 // GetManifest handles requests for Docker manifests
 func (h *DockerRemoteHandler) GetManifest(c *gin.Context) {
+	repoKey, ok := repoKeyFromContext(c)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid or missing repoKey"})
+		return
+	}
+	cfg, ok := h.store.Get(repoKey)
+	if !ok {
+		c.JSON(http.StatusNotFound, gin.H{"error": "unknown repoKey: repository configuration not found"})
+		return
+	}
+	log.Infof("Using repo config: %+v", cfg)
+
 	reqURL := c.Request.URL.String()
 	log.Infof("Received request for manifest URL: %s", reqURL)
 
@@ -44,9 +95,11 @@ func (h *DockerRemoteHandler) GetManifest(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid OCI URL"})
 		return
 	}
-	client := newDockerHubClient()
+	client := oci.NewRegistryClient(cfg.RemoteURL, oci.NewTokenRoundTripper(true, nil))
 
-	resp, err := client.GetManifest(c.Request.Context(), "library/"+url.Name.Rest(), url.Reference.String(), c.Request.Header)
+	normalizedName := normalizeName(cfg.RemoteURL, url.Name.Rest())
+
+	resp, err := client.GetManifest(c.Request.Context(), normalizedName, url.Reference.String(), c.Request.Header)
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"error": "failed to get manifest from upstream"})
 		return
@@ -71,6 +124,18 @@ func (h *DockerRemoteHandler) GetManifest(c *gin.Context) {
 
 // GetBlob handles requests for Docker blobs
 func (h *DockerRemoteHandler) GetBlob(c *gin.Context) {
+	repoKey, ok := repoKeyFromContext(c)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid or missing repoKey"})
+		return
+	}
+	cfg, ok := h.store.Get(repoKey)
+	if !ok {
+		c.JSON(http.StatusNotFound, gin.H{"error": "unknown repoKey"})
+		return
+	}
+	log.Infof("Using repo config: %+v", cfg)
+
 	corrID, _ := c.Get(mw.CorrelationIDHeader)
 	ctx := c.Request.Context()
 	start := time.Now()
@@ -98,16 +163,10 @@ func (h *DockerRemoteHandler) GetBlob(c *gin.Context) {
 		Start:  start,
 		Logger: logger,
 	}
-	h.streamBlob(req)
+	h.streamBlob(req, &cfg)
 }
 
 // --- helpers ---
-
-// newDockerHubClient creates a Docker Hub registry client
-func newDockerHubClient() *oci.RegistryClient {
-	rt := oci.NewTokenRoundTripper(true, nil)
-	return oci.NewRegistryClient("https://registry-1.docker.io", rt)
-}
 
 type blobRequest struct {
 	Ctx    context.Context
@@ -118,7 +177,7 @@ type blobRequest struct {
 	Logger *log.Entry
 }
 
-func (h *DockerRemoteHandler) streamBlob(req *blobRequest) {
+func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.RepoConfig) {
 	// Try local cache
 	exists, err := h.blobs.Exists(req.Ctx, req.Digest)
 	if err != nil {
@@ -152,8 +211,11 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest) {
 	}
 
 	// Otherwise fetch from upstream
-	client := newDockerHubClient()
-	resp, err := client.GetBlob(req.Ctx, "library/"+req.URL.Name.Rest(), req.URL.Reference.String(), req.Gin.Request.Header)
+	client := oci.NewRegistryClient(cfg.RemoteURL, oci.NewTokenRoundTripper(true, nil))
+
+	normalizedName := normalizeName(cfg.RemoteURL, req.URL.Name.Rest())
+
+	resp, err := client.GetBlob(req.Ctx, normalizedName, req.URL.Reference.String(), req.Gin.Request.Header)
 	if err != nil {
 		req.Gin.JSON(http.StatusBadGateway, gin.H{"error": "failed to fetch blob from upstream"})
 		return
@@ -192,4 +254,27 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest) {
 func writeError(c *gin.Context, status int, msg string, err error) {
 	log.WithError(err).Warn(msg)
 	c.JSON(status, gin.H{"error": msg})
+}
+
+func repoKeyFromContext(c *gin.Context) (string, bool) {
+	v, ok := c.Get("RepoKey")
+	if !ok {
+		return "", false
+	}
+	key, ok := v.(string)
+	return key, ok
+}
+
+// normalizeName applies registry-specific normalization rules.
+// For Docker Hub (registry-1.docker.io), unscoped names are prefixed with "library/".
+// For all other registries, the name is returned unchanged.
+func normalizeName(remoteURL, name string) string {
+	if remoteURL == "https://registry-1.docker.io" {
+		// If name already contains a slash, leave it alone
+		if strings.Contains(name, "/") {
+			return name
+		}
+		return "library/" + name
+	}
+	return name
 }

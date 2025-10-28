@@ -59,36 +59,35 @@ func ParseOCIURL(s string) (OCIURL, error) {
 	if err != nil {
 		return OCIURL{}, err
 	}
-	// Check for /v2/ prefix
 	if !strings.HasPrefix(u.Path, "/v2/") {
 		return OCIURL{}, fmt.Errorf("invalid OCI URL, missing /v2/ prefix: %q", u.Path)
 	}
-	// Trim /v2/ prefix
-	s = strings.TrimPrefix(u.Path, "/v2/")
-	s = strings.TrimPrefix(s, "/")
-	// Split into registry host, repo name, subresource, reference
-	parts := strings.SplitN(s, "/", 3)
-	if len(parts) < 3 {
-		return OCIURL{}, fmt.Errorf("invalid OCI URL: %q", s)
+	path := strings.TrimPrefix(u.Path, "/v2/")
+	path = strings.TrimPrefix(path, "/")
+
+	var subResource, namePart, refPart string
+	switch {
+	case strings.Contains(path, "/manifests/"):
+		parts := strings.SplitN(path, "/manifests/", 2)
+		namePart, refPart = parts[0], parts[1]
+		subResource = "manifests"
+	case strings.Contains(path, "/blobs/"):
+		parts := strings.SplitN(path, "/blobs/", 2)
+		namePart, refPart = parts[0], parts[1]
+		subResource = "blobs"
+	default:
+		return OCIURL{}, fmt.Errorf("invalid OCI URL, missing manifests or blobs: %q", path)
 	}
-	repoNameStr := parts[0] + "/" + parts[1]
-	repoName, err := ParseRepositoryName(repoNameStr)
+
+	repoName, err := ParseRepositoryName(namePart)
 	if err != nil {
-		return OCIURL{}, fmt.Errorf("invalid repository name in OCI URL: %v", err)
+		return OCIURL{}, fmt.Errorf("invalid repository name: %v", err)
 	}
-	// Further split subresource and reference
-	subParts := strings.SplitN(parts[2], "/", 2)
-	if len(subParts) != 2 {
-		return OCIURL{}, fmt.Errorf("invalid subresource/reference in OCI URL: %q", parts[2])
-	}
-	ref, err := ParseReference(subParts[1])
+	ref, err := ParseReference(refPart)
 	if err != nil {
-		return OCIURL{}, fmt.Errorf("invalid reference in OCI URL: %v", err)
+		return OCIURL{}, fmt.Errorf("invalid reference: %v", err)
 	}
-	subResource := subParts[0]
-	if subResource != "manifests" && subResource != "blobs" {
-		return OCIURL{}, fmt.Errorf("invalid subresource in OCI URL: %q", subResource)
-	}
+
 	return OCIURL{
 		RegistryHost: u.Host,
 		Name:         repoName,

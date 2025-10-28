@@ -1,8 +1,9 @@
 package mw
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
-	"github.com/martencassel/gobinrepo/internal/util/path"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,12 +16,14 @@ func NewRepoKeyMiddleware() *RepoKeyMiddleware {
 
 func (m *RepoKeyMiddleware) Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		p := path.ParsePath(c.Request.URL.Path)
-		repoKey, ok := path.RepoKeyFromPath(p)
-		if ok {
+		repoKey := c.Param("repoKey")
+		subPath := strings.TrimPrefix(c.Param("path"), "/")
+
+		if repoKey != "" {
 			c.Set("RepoKey", repoKey)
+			c.Set("SubPath", subPath)
+			log.Infof("RepoKeyMiddleware: repoKey=%s, subPath=%s", repoKey, subPath)
 		}
-		log.Infof("RepoKeyMiddleware: RepoKey=%s, Path=%s", repoKey, c.Request.URL.Path)
 		c.Next()
 	}
 }

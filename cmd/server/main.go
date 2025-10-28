@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/gin-gonic/gin"
+	"github.com/martencassel/gobinrepo/internal/configstore"
 	"github.com/martencassel/gobinrepo/internal/mw"
 	"github.com/martencassel/gobinrepo/internal/remote"
 	"github.com/martencassel/gobinrepo/internal/util/blobs"
@@ -23,6 +24,20 @@ func main() {
 	}
 }
 
+func buildConfigStore() (*configstore.RepoConfigStore, error) {
+	// For simplicity, using an in-memory config store with a single repo config
+	store := configstore.NewRepoConfigStore()
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "dockerhub",
+		RemoteURL: "https://registry-1.docker.io",
+	})
+	store.Add(configstore.RepoConfig{
+		RepoKey:   "quayio",
+		RemoteURL: "https://quay.io",
+	})
+	return store, nil
+}
+
 func buildRouter() (*gin.Engine, error) {
 	r := gin.Default()
 	r.Use(mw.LoggingMiddleware())
@@ -30,9 +45,13 @@ func buildRouter() (*gin.Engine, error) {
 	if err != nil {
 		panic(err)
 	}
-	docker := remote.NewDockerRemoteHandler(blobs)
-	docker.RegisterRoutes(r)
+	configStore, err := buildConfigStore()
+	if err != nil {
+		return nil, err
+	}
 	mw := mw.NewRepoKeyMiddleware()
 	r.Use(mw.Middleware())
+	docker := remote.NewDockerRemoteHandler(blobs, configStore)
+	docker.RegisterRoutes(r)
 	return r, nil
 }
