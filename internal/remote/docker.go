@@ -99,7 +99,7 @@ func (h *DockerRemoteHandler) GetManifest(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid OCI URL"})
 		return
 	}
-	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable)
+	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable, &cfg)
 	normalizedName := normalizeName(cfg.RemoteURL, url.Name.Rest())
 
 	resp, err := client.GetManifest(c.Request.Context(), normalizedName, url.Reference.String(), c.Request.Header)
@@ -212,7 +212,7 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 		}).Info("Blob served from local store")
 		return
 	}
-	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable)
+	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable, cfg)
 
 	normalizedName := normalizeName(cfg.RemoteURL, req.URL.Name.Rest())
 
@@ -292,14 +292,19 @@ func newDefaultTransport() *http.Transport {
 	return tr
 }
 
-func newTracedRegistryClient(remoteURL string, traceUpstream bool) *oci.RegistryClient {
+func newTracedRegistryClient(remoteURL string, traceUpstream bool, cfg *configstore.RepoConfig) *oci.RegistryClient {
 	base := newDefaultTransport()
-	var tokenBase http.RoundTripper = base
-	tokenRT := oci.NewTokenRoundTripper(true, oci.WithTransport(tokenBase))
-	// Optionally wrap with upstream tracer
-	var outer http.RoundTripper = tokenRT
-	if traceUpstream {
-		outer = &trace.TracingRoundTripper{Base: tokenRT}
+	var rt http.RoundTripper = base
+	if cfg.Username != "" {
+		rt = &oci.BasicAuthRoundTripper{
+			Username: cfg.Username,
+			Password: cfg.Password,
+			Base:     rt,
+		}
 	}
-	return oci.NewRegistryClient(remoteURL, outer)
+	rt = oci.NewTokenRoundTripper(true, oci.WithTransport(rt))
+	if traceUpstream {
+		rt = &trace.TracingRoundTripper{Base: rt}
+	}
+	return oci.NewRegistryClient(remoteURL, rt)
 }

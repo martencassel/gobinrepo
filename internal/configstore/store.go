@@ -6,6 +6,8 @@ import "sync"
 type RepoConfig struct {
 	RepoKey   string `json:"repoKey"`
 	RemoteURL string `json:"remoteURL"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
 }
 
 // RepoConfigStore is an in-memory store for repo configurations.
