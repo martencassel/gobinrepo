@@ -3,6 +3,7 @@ package oci
 import (
 	"context"
 	"fmt"
+	"internal/singleflight"
 	"io"
 	"net/http"
 	"strings"
@@ -293,4 +294,17 @@ func (c *RegistryClient) StreamAndCacheWithRetry(
 		}
 	}
 	return lastErr
+}
+
+var g singleflight.Group
+
+func (c *RegistryClient) FetchBlobOnce(ctx context.Context, repo, digest string, hdr http.Header) (*http.Response, error) {
+	key := repo + "@" + digest
+	v, err, _ := g.Do(key, func() (interface{}, error) {
+		return c.FetchBlob(ctx, repo, digest, hdr)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return v.(*http.Response), nil
 }
