@@ -2,30 +2,23 @@
 
 `gobinrepo` is a lightweight Go‑based registry proxy that demonstrates, from its very first commit, the ability to **cache and serve container images** locally.
 
-The design goal is to make repeated pulls dramatically faster and reduce redundant network traffic, while keeping the proxy simple and idiomatic.
+The design goal is to make repeated pulls dramatically faster and reduce redundant network traffic.
 
 ---
 
-## ✨ First Commit Feature
-
-The initial proof of concept provided:
-
 - Acts as a proxy for Docker/OCI images.
-- Caches blobs under `/tmp/blobs/`.
+- Caches blobs to the local filesystem.
 - Serves cached content on repeated pulls.
 - Demonstrates integration with `podman` as a client.
 - Authenticate to private registries such as docker.io subscription
+- If an image pull is interrupted, incomplete downloads are never visible under the final path.
 
 ---
 
-## 🔑 Built‑in Repository Keys
+# Configuration and Overrides
 
-By default, `gobinrepo` starts with two built‑in repository configurations:
-
-- **dockerhub** → `https://registry-1.docker.io`
-- **quayio** → `https://quay.io`
-
-This means you can immediately pull images through the proxy using either repoKey without any extra configuration.
+Config file (config.yaml) You can define additional repositories or override the built‑ins by editing your config file.
+The file is loaded at startup and provides the authoritative list of repositories.
 
 ---
 
