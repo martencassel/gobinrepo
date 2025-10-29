@@ -3,6 +3,7 @@ package remote
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -39,6 +40,11 @@ func (h *DockerRemoteHandler) RegisterRoutes(r *gin.Engine) {
 		c.Header("Docker-Distribution-API-Version", "registry/2.0")
 		c.Status(http.StatusOK)
 	})
+	r.GET("/v2/", func(c *gin.Context) {
+		c.Header("Docker-Distribution-API-Version", "registry/2.0")
+		c.Status(http.StatusOK)
+	})
+
 	// r.GET("/v2/:repoKey/*name/manifests/:ref", h.GetManifest)
 	// r.GET("/v2/:repoKey/*name/blobs/:digest", h.GetBlob)
 
@@ -61,6 +67,10 @@ func (h *DockerRemoteHandler) handleV2(c *gin.Context) {
 		parts := strings.SplitN(rest, "/blobs/", 2)
 		name, digest := parts[0], parts[1]
 		h.GetBlobWithParams(c, repoKey, name, digest)
+	case strings.Contains(rest, "/tags/list"):
+		parts := strings.SplitN(rest, "/tags/list", 2)
+		name := parts[0]
+		h.GetTagListWithParams(c, repoKey, name)
 	default:
 		c.JSON(http.StatusNotFound, gin.H{"error": "unsupported v2 path"})
 	}
@@ -182,6 +192,9 @@ type blobRequest struct {
 }
 
 func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.RepoConfig) {
+	etag := fmt.Sprintf(`"%s"`, req.Digest.String())
+	dockerContentDigest := req.Digest.String()
+
 	// Try local cache
 	exists, err := h.blobs.Exists(req.Ctx, req.Digest)
 	if err != nil {
@@ -189,6 +202,14 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 		return
 	}
 	if exists {
+		// Handle conditional headers
+		if inm := req.Gin.Request.Header.Get("If-None-Match"); inm == etag {
+			req.Gin.Writer.Header().Set("ETag", etag)
+			req.Gin.Writer.Header().Set("Docker-Content-Digest", dockerContentDigest)
+			req.Gin.Writer.WriteHeader(http.StatusNotModified)
+			return
+		}
+
 		reader, err := h.blobs.Get(req.Ctx, req.Digest)
 		if err != nil {
 			req.Gin.JSON(http.StatusInternalServerError, gin.H{"error": "failed to open blob"})
@@ -199,7 +220,11 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 				log.Warnf("failed to close reader: %v", cerr)
 			}
 		}()
+		req.Gin.Writer.Header().Set("ETag", etag)
+		req.Gin.Writer.Header().Set("Docker-Content-Digest", dockerContentDigest)
 
+		// Cache-Control: public, max-age=31536000, immutable
+		req.Gin.Writer.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
 		written, err := io.Copy(req.Gin.Writer, reader)
 		if err != nil {
 			req.Gin.JSON(http.StatusInternalServerError, gin.H{"error": "failed to stream blob"})
@@ -227,6 +252,29 @@ func (h *DockerRemoteHandler) streamBlob(req *blobRequest, cfg *configstore.Repo
 			log.Warnf("failed to close response body: %v", cerr)
 		}
 	}()
+
+	// If upstream says Not Modified, just forward that
+	if resp.StatusCode == http.StatusNotModified {
+		req.Gin.Writer.Header().Set("ETag", etag)
+		req.Gin.Writer.Header().Set("Docker-Content-Digest", dockerContentDigest)
+		req.Gin.Writer.WriteHeader(http.StatusNotModified)
+		return
+	}
+
+	// Copy response headers from upstream, but ensure consistent ETag and Docker-Content-Digest
+	for k, v := range resp.Header {
+		// Skip ETag and Docker-Content-Digest as we'll set them consistently
+		if k != "ETag" && k != "Docker-Content-Digest" {
+			for _, vv := range v {
+				req.Gin.Header(k, vv)
+			}
+		}
+	}
+
+	// Set consistent headers based on the request digest
+	req.Gin.Header("ETag", etag)
+	req.Gin.Header("Docker-Content-Digest", dockerContentDigest)
+	req.Gin.Status(resp.StatusCode)
 
 	writer, err := h.blobs.WriterAtomic(req.Ctx, req.Digest)
 	if err != nil {
@@ -314,4 +362,51 @@ func newTracedRegistryClient(remoteURL string, traceUpstream bool, cfg *configst
 		rt = &trace.TracingRoundTripper{Base: rt}
 	}
 	return oci.NewRegistryClient(remoteURL, rt)
+}
+
+func (h *DockerRemoteHandler) GetTagListWithParams(c *gin.Context, repoKey, name string) {
+	repoKey, ok := repoKeyFromContext(c)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid or missing repoKey"})
+		return
+	}
+	cfg, ok := h.store.Get(repoKey)
+	if !ok {
+		c.JSON(http.StatusNotFound, gin.H{"error": "unknown repoKey: repository configuration not found"})
+		return
+	}
+	log.Infof("Using repo config: %s", cfg.String())
+
+	reqURL := c.Request.URL.String()
+	log.Infof("Received request for tag list URL: %s", reqURL)
+
+	url, err := oci.ParseOCIURL(reqURL)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid OCI URL"})
+		return
+	}
+	client := newTracedRegistryClient(cfg.RemoteURL, h.traceEnable, &cfg)
+	normalizedName := normalizeName(cfg.RemoteURL, url.Name.Rest())
+
+	resp, err := client.GetTagList(c.Request.Context(), normalizedName, c.Request.Header)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": "failed to get tag list from upstream"})
+		return
+	}
+	defer func() {
+		if cerr := resp.Body.Close(); cerr != nil {
+			log.Warnf("failed to close response body: %v", cerr)
+		}
+	}()
+
+	c.Status(resp.StatusCode)
+	for k, v := range resp.Header {
+		for _, vv := range v {
+			c.Header(k, vv)
+		}
+	}
+	_, err = io.Copy(c.Writer, resp.Body)
+	if err != nil {
+		log.Errorf("Failed to copy response body: %v", err)
+	}
 }

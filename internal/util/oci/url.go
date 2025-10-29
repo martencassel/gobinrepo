@@ -75,6 +75,11 @@ func ParseOCIURL(s string) (OCIURL, error) {
 		parts := strings.SplitN(path, "/blobs/", 2)
 		namePart, refPart = parts[0], parts[1]
 		subResource = "blobs"
+	case strings.Contains(path, "/tags/list"):
+		parts := strings.SplitN(path, "/tags/list", 2)
+		namePart = parts[0]
+		refPart = "" // No reference for tag list
+		subResource = "tags/list"
 	default:
 		return OCIURL{}, fmt.Errorf("invalid OCI URL, missing manifests or blobs: %q", path)
 	}

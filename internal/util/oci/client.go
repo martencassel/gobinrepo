@@ -318,3 +318,13 @@ func (c *RegistryClient) FetchBlobOnce(ctx context.Context, repo, digest string,
 	}
 	return v.(*http.Response), nil
 }
+
+func (c *RegistryClient) GetTagList(ctx context.Context, repo string, hdr http.Header) (*http.Response, error) {
+	u := c.baseURL + "/v2/" + repo + "/tags/list"
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+	if err != nil {
+		return nil, err
+	}
+	copyForwardHeaders(req.Header, hdr)
+	return c.httpClient.Do(req)
+}
