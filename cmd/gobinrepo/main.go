@@ -36,7 +36,9 @@ func main() {
 		"HTTP listen address (e.g. ':5000', '127.0.0.1:8080')")
 	configPath := flag.String("config", "config.yaml",
 		"Path to configuration file")
+
 	env := flag.String("env", os.Getenv("APP_ENV"), "Environment (development|production)")
+	publicURL := flag.String("publicurl", "", "Public URL clients should use (e.g. 'https://repo.example.com')")
 	flag.Parse()
 	// Handle version flag
 	if *showVer {
@@ -44,13 +46,29 @@ func main() {
 		fmt.Printf("gobinrepo %s (commit %s, built %s)\n", version, commit, buildDate)
 		os.Exit(0)
 	}
+	fmt.Println("Public URL is:", *publicURL)
 	devMode := (*env == "" || *env == "development")
 
 	// Check if config file is provided as positional argument
 	if flag.NArg() > 0 {
 		*configPath = flag.Arg(0)
 	}
-	router, cfg, err := buildRouter(*configPath, devMode)
+
+	// Load config first to allow overriding with flags
+	cfg, err := config.LoadConfig(*configPath)
+	if err != nil {
+		panic(err)
+	}
+
+	// Override config with command line flags
+	if *publicURL != "" {
+		cfg.Server.PublicURL = *publicURL
+		log.Infof("Public URL overridden via flag: %s", *publicURL)
+	}
+
+	log.Infof("Using public URL: %s", cfg.Server.PublicURL)
+
+	router, err := buildRouterWithConfig(cfg, devMode)
 	if err != nil {
 		panic(err)
 	}
@@ -116,11 +134,25 @@ func main() {
 	}
 }
 
-func loadConfigStore(configPath string) (*configstore.RepoConfigStore, *config.Config, error) {
-	cfg, err := config.LoadConfig(configPath)
-	if err != nil {
-		return nil, nil, err
+func initRouter(devMode bool) *gin.Engine {
+	var r *gin.Engine
+	if devMode {
+		r = gin.Default() // includes Gin’s banner + logger
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+		r = gin.New()
+		r.Use(gin.Recovery())
+		// your own logging middleware
 	}
+	return r
+}
+
+func buildRouterWithConfig(cfg *config.Config, devMode bool) (*gin.Engine, error) {
+	r := initRouter(devMode)
+	r.Use(mw.RequestTracer())
+	r.Use(mw.LoggingMiddleware())
+
+	// Build config store from the loaded config
 	store := configstore.NewRepoConfigStore()
 	for name, r := range cfg.Remotes {
 		if r.Username == nil || r.Password == nil {
@@ -137,37 +169,14 @@ func loadConfigStore(configPath string) (*configstore.RepoConfigStore, *config.C
 			Password:  *r.Password,
 		})
 	}
-	return store, cfg, nil
-}
 
-func initRouter(devMode bool) *gin.Engine {
-	var r *gin.Engine
-	if devMode {
-		r = gin.Default() // includes Gin’s banner + logger
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-		r = gin.New()
-		r.Use(gin.Recovery())
-		// your own logging middleware
-	}
-	return r
-}
-
-func buildRouter(configPath string, devMode bool) (*gin.Engine, *config.Config, error) {
-	r := initRouter(devMode)
-	r.Use(mw.RequestTracer())
-	r.Use(mw.LoggingMiddleware())
-	configStore, cfg, err := loadConfigStore(configPath)
-	if err != nil {
-		return nil, cfg, err
-	}
 	blobs, err := blobs.NewBlobStoreFS(cfg.Cache.Path)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	mw := mw.NewRepoKeyMiddleware()
 	r.Use(mw.Middleware())
-	docker := remote.NewDockerRemoteHandler(blobs, configStore, true)
+	docker := remote.NewDockerRemoteHandler(blobs, store, true)
 	docker.RegisterRoutes(r)
-	return r, cfg, nil
+	return r, nil
 }

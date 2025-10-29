@@ -10,8 +10,9 @@ import (
 
 type Config struct {
 	Server struct {
-		Listen string `yaml:"listen"`
-		Trace  bool   `yaml:"trace"`
+		Listen    string `yaml:"listen"`
+		Trace     bool   `yaml:"trace"`
+		PublicURL string `yaml:"public_url"`
 	} `yaml:"server"`
 
 	Cache struct {
@@ -84,5 +85,8 @@ func applyDefaults(cfg *Config) {
 	// Cache defaults
 	if cfg.Cache.Path == "" {
 		cfg.Cache.Path = "/tmp/gobinrepo/cache"
+	}
+	if cfg.Server.PublicURL == "" {
+		cfg.Server.PublicURL = "http://localhost:5000"
 	}
 }
