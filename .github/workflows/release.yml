@@ -15,6 +15,9 @@ jobs:
         with:
           go-version: '1.23'
 
+      - name: Debug repo contents
+        run: pwd ls -la ls -la cmd || true git rev-parse --verify HEAD git tag --points-at HEAD || true
+
       - name: Build
         run: go build -o gobinrepo ./cmd/gobinrepo
 
