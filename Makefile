@@ -11,7 +11,7 @@ GOLINT=golangci-lint
 # Binary names and paths
 BINARY_NAME=gobinrepo
 BINARY_UNIX=$(BINARY_NAME)_unix
-MAIN_PATH=./cmd/server
+MAIN_PATH=./cmd/binrepo
 BUILD_DIR=./bin
 
 # Version information
