@@ -32,4 +32,8 @@ go.work.sum
 # .idea/
 # .vscode/
 ROADMAP
-gobinrepo
+
+# Ignore built binary at repo root
+/gobinrepo
+# Keep the source code under cmd/gobinrepo
+!/cmd/gobinrepo/
