@@ -54,7 +54,6 @@ func (h *DockerRemoteHandler) RegisterRoutes(r *gin.Engine) {
 func (h *DockerRemoteHandler) handleV2(c *gin.Context) {
 	repoKey := c.Param("repoKey")
 	rest := strings.TrimPrefix(c.Param("path"), "/")
-
 	switch {
 	case strings.Contains(rest, "/manifests/"):
 		parts := strings.SplitN(rest, "/manifests/", 2)
@@ -70,7 +69,7 @@ func (h *DockerRemoteHandler) handleV2(c *gin.Context) {
 	case strings.Contains(rest, "/tags/list"):
 		parts := strings.SplitN(rest, "/tags/list", 2)
 		name := parts[0]
-		h.GetTagListWithParams(c, repoKey, name)
+		h.GetTagListWithParams(c, name)
 	default:
 		c.JSON(http.StatusNotFound, gin.H{"error": "unsupported v2 path"})
 	}
@@ -364,7 +363,7 @@ func newTracedRegistryClient(remoteURL string, traceUpstream bool, cfg *configst
 	return oci.NewRegistryClient(remoteURL, rt)
 }
 
-func (h *DockerRemoteHandler) GetTagListWithParams(c *gin.Context, repoKey, name string) {
+func (h *DockerRemoteHandler) GetTagListWithParams(c *gin.Context, name string) {
 	repoKey, ok := repoKeyFromContext(c)
 	if !ok {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid or missing repoKey"})
