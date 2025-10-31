@@ -9,29 +9,44 @@ cache:
 
 # Define individual remotes
 remotes:
+  debian:
+    remote_url: http://deb.debian.org/debian
+    package_type: debian
+
   dockerhub:
+    package_type: docker
     remote_url: https://registry-1.docker.io
     username: ${DOCKERHUB_USERNAME}   # support env substitution
     password: ${DOCKERHUB_PASSWORD}   # support env substitution
   quayio:
     remote_url: https://quay.io
+    package_type: docker
   ghcr:
     remote_url: https://ghcr.io
+    package_type: docker
   gcr:
     remote_url: https://gcr.io
+    package_type: docker
   mcr:
     remote_url: https://mcr.microsoft.com
+    package_type: docker
   publicecr:
     remote_url: https://public.ecr.aws
+    package_type: docker
   icr:
     remote_url: https://icr.io
+    package_type: docker
   ocir:
     remote_url: https://container-registry.oracle.com
+    package_type: docker
   nvcr:
     remote_url: https://nvcr.io
+    package_type: docker
   gitlab:
     remote_url: https://registry.gitlab.com
+    package_type: docker
   redhat:
     remote_url: registry.access.redhat.com
+    package_type: docker
 ---
 

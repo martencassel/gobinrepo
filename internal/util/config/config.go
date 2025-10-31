@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/martencassel/gobinrepo/internal/configstore"
 	"gopkg.in/yaml.v3"
 )
 
@@ -23,9 +24,10 @@ type Config struct {
 }
 
 type RemoteConfig struct {
-	RemoteURL string  `yaml:"remote_url"`
-	Username  *string `yaml:"username,omitempty"`
-	Password  *string `yaml:"password,omitempty"`
+	PackageType configstore.PackageType `yaml:"package_type"`
+	RemoteURL   string                  `yaml:"remote_url"`
+	Username    *string                 `yaml:"username,omitempty"`
+	Password    *string                 `yaml:"password,omitempty"`
 }
 
 // LoadConfig reads a YAML config file, expands env vars, and unmarshals into Config.
