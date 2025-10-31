@@ -53,19 +53,16 @@ func main() {
 	if flag.NArg() > 0 {
 		*configPath = flag.Arg(0)
 	}
-
 	// Load config first to allow overriding with flags
 	cfg, err := config.LoadConfig(*configPath)
 	if err != nil {
 		panic(err)
 	}
-
 	// Override config with command line flags
 	if *publicURL != "" {
 		cfg.Server.PublicURL = *publicURL
 		log.Infof("Public URL overridden via flag: %s", *publicURL)
 	}
-
 	log.Infof("Using public URL: %s", cfg.Server.PublicURL)
 
 	router, err := buildRouterWithConfig(cfg, devMode)
@@ -79,9 +76,10 @@ func main() {
 	for name, r := range cfg.Remotes {
 		hasCreds := (r.Username != nil && r.Password != nil)
 		log.WithFields(log.Fields{
-			"remote":     name,
-			"remote_url": r.RemoteURL,
-			"has_creds":  hasCreds,
+			"remote":       name,
+			"package_type": r.PackageType,
+			"remote_url":   r.RemoteURL,
+			"has_creds":    hasCreds,
 		}).Info("Configured remote")
 	}
 
@@ -169,14 +167,31 @@ func buildRouterWithConfig(cfg *config.Config, devMode bool) (*gin.Engine, error
 			Password:  *r.Password,
 		})
 	}
-
 	blobs, err := blobs.NewBlobStoreFS(cfg.Cache.Path)
 	if err != nil {
 		return nil, err
 	}
 	mw := mw.NewRepoKeyMiddleware()
 	r.Use(mw.Middleware())
+
 	docker := remote.NewDockerRemoteHandler(blobs, store, true)
 	docker.RegisterRoutes(r)
+
+	debian := remote.NewDebianRemoteHandler(blobs, store, true)
+	debian.RegisterRoutes(r)
+
+	r.NoRoute(func(c *gin.Context) {
+		log.WithFields(log.Fields{
+			"method":  c.Request.Method,
+			"path":    c.Request.URL.Path,
+			"client":  c.ClientIP(),
+			"headers": c.Request.Header,
+		}).Warn("Unhandled request")
+
+		c.JSON(http.StatusNotFound, gin.H{
+			"error":   "Not Found",
+			"message": "No route matched your request",
+		})
+	})
 	return r, nil
 }

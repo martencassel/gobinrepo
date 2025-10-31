@@ -5,16 +5,26 @@ import (
 	"sync"
 )
 
+// PackageType
+type PackageType string
+
+const (
+	PackageTypeDocker PackageType = "docker"
+	PackageTypeDebian PackageType = "debian"
+)
+
 // RepoConfig represents a mapping from repoKey → remote registry URL.
 type RepoConfig struct {
-	RepoKey   string `json:"repoKey"`
-	RemoteURL string `json:"remoteURL"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
+	RepoKey     string      `json:"repoKey"`
+	PackageType PackageType `json:"packageType"`
+	RemoteURL   string      `json:"remoteURL"`
+	Username    string      `json:"username"`
+	Password    string      `json:"password"`
 }
 
 func (c RepoConfig) String() string {
-	return fmt.Sprintf("URL=%s Username=%s Password=%s",
+	return fmt.Sprintf("PackageType: %s URL=%s Username=%s Password=%s",
+		c.PackageType,
 		c.RemoteURL,
 		c.Username,
 		mask(c.Password),

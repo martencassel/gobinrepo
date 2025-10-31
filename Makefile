@@ -1,3 +1,5 @@
+LISTEN_ADDR ?= "127.0.0.1\:5000"
+
 # Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
@@ -94,9 +96,10 @@ vet:
 	$(GOCMD) vet ./...
 
 # Run the application in development mode
+
 run:
-	@echo "Running $(BINARY_NAME)..."
-	$(GOCMD) run $(MAIN_PATH) $(ARGS)
+	@echo "Running $(BINARY_NAME) on $(LISTEN_ADDR)..."
+	$(GOCMD) run $(MAIN_PATH) --http-listen-addr="$(LISTEN_ADDR)" $(ARGS)
 
 # Run the application in development mode with live reload (requires air)
 dev:
@@ -121,8 +124,9 @@ uninstall:
 
 # Build and run
 build-run: build
-	@echo "Running built binary..."
-	./$(BUILD_DIR)/$(BINARY_NAME) $(ARGS)
+	@echo "Running built binary on $(LISTEN_ADDR)..."
+	./$(BUILD_DIR)/$(BINARY_NAME) --http-listen-addr="$(LISTEN_ADDR)" $(ARGS)
+
 
 # Check if dependencies are up to date
 check-deps:

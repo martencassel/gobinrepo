@@ -1,0 +1,8 @@
+FROM debian:12
+
+# Set environment variables if you're using a proxy server
+# ENV http_proxy=http://your-proxy-server:port
+# ENV https_proxy=http://your-proxy-server:port
+
+RUN echo "deb [trusted=yes] http://192.168.1.100:8080/debian/debian-remote/debian stable main" > /etc/apt/sources.list \
+    && apt-get update -y
