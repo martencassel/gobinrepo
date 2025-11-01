@@ -13,6 +13,10 @@ remotes:
     remote_url: http://deb.debian.org/debian
     package_type: debian
 
+  jetstack:
+    remote_url: https://charts.jetstack.io
+    package_type: helm
+
   dockerhub:
     package_type: docker
     remote_url: https://registry-1.docker.io

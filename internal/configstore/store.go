@@ -6,12 +6,46 @@ import (
 )
 
 // PackageType
-type PackageType string
+type PackageType int
 
 const (
-	PackageTypeDocker PackageType = "docker"
-	PackageTypeDebian PackageType = "debian"
+	PackageUnknown PackageType = iota
+	PackageTypeDocker
+	PackageTypeDebian
+	PackageTypeHelm
 )
+
+func (p PackageType) String() string {
+	switch p {
+	case PackageTypeHelm:
+		return "helm"
+	case PackageTypeDocker:
+		return "docker"
+	case PackageTypeDebian:
+		return "debian"
+	default:
+		return "unknown"
+	}
+}
+func (p *PackageType) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var s string
+	if err := unmarshal(&s); err != nil {
+		return err
+	}
+
+	switch s {
+	case "helm":
+		*p = PackageTypeHelm
+	case "docker":
+		*p = PackageTypeDocker
+	case "debian":
+		*p = PackageTypeDebian
+	default:
+		*p = PackageUnknown
+	}
+
+	return nil
+}
 
 // RepoConfig represents a mapping from repoKey → remote registry URL.
 type RepoConfig struct {

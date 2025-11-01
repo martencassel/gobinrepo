@@ -141,7 +141,11 @@ func (r *DebianRemoteHandler) handlePool(c *gin.Context, repoKey, path string) {
 	}
 	if found {
 		log.Infof("Serving file from local filestore: repoKey=%s, path=%s", repoKey, path)
-		defer blobReader.Close()
+		if err := blobReader.Close(); err != nil {
+			log.Errorf("Error closing blob reader: %v", err)
+			handleError(c, 500, fmt.Sprintf("Failed to close blob reader: %v", err))
+			return
+		}
 		// Stream blob to response
 		_, err := io.Copy(c.Writer, blobReader)
 		if err != nil {
