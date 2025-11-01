@@ -155,8 +155,9 @@ func buildRouterWithConfig(cfg *config.Config, devMode bool) (*gin.Engine, error
 	for name, r := range cfg.Remotes {
 		if r.Username == nil || r.Password == nil {
 			store.Add(configstore.RepoConfig{
-				RepoKey:   name,
-				RemoteURL: r.RemoteURL,
+				RepoKey:     name,
+				RemoteURL:   r.RemoteURL,
+				PackageType: r.PackageType,
 			})
 			continue
 		}
@@ -179,6 +180,9 @@ func buildRouterWithConfig(cfg *config.Config, devMode bool) (*gin.Engine, error
 
 	debian := remote.NewDebianRemoteHandler(blobs, store, true)
 	debian.RegisterRoutes(r)
+
+	helm := remote.NewHelmRepoHandler(blobs, store)
+	helm.Register(r)
 
 	r.NoRoute(func(c *gin.Context) {
 		log.WithFields(log.Fields{

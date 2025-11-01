@@ -1,12 +1,12 @@
 # gobinrepo
 
-`gobinrepo` is a lightweight Go‑based registry proxy that demonstrates, from its very first commit, the ability to **cache and serve container images** locally.
+`gobinrepo` is a lightweight Go‑based artifact caching proxy that demonstrates, the ability to **cache and serve container images, helm charts, and debian packages** locally.
 
-The design goal is to make repeated pulls dramatically faster and reduce redundant network traffic.
+The design goal is to make repeated downloads dramatically faster and reduce redundant network traffic.
 
 ---
 
-- Acts as a proxy for Docker/OCI images.
+- Acts as a proxy for Docker/OCI images, Helm charts (classic), Debian repositories.
 - Caches blobs to the local filesystem.
 - Serves cached content on repeated pulls.
 - Demonstrates integration with `podman` as a client.
