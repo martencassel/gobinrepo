@@ -17,6 +17,10 @@ remotes:
     remote_url: https://charts.jetstack.io
     package_type: helm
 
+  cloudnative-pg:
+    remote_url: https://cloudnative-pg.github.io/charts
+    package_type: helm
+
   dockerhub:
     package_type: docker
     remote_url: https://registry-1.docker.io

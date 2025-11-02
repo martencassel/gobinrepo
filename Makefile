@@ -97,7 +97,7 @@ vet:
 
 # Run the application in development mode
 
-run:
+run: build
 	@echo "Running $(BINARY_NAME) on $(LISTEN_ADDR)..."
 	$(GOCMD) run $(MAIN_PATH) --http-listen-addr="$(LISTEN_ADDR)" $(ARGS)
 
