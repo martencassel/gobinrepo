@@ -32,6 +32,7 @@ go.work.sum
 # .idea/
 # .vscode/
 ROADMAP
+*.tgz
 
 # Ignore built binary at repo root
 /gobinrepo

@@ -1,0 +1,25 @@
+Flow
+
+1. Client asks for /helm/cloudnative-pg/external/.../pgbench-0.1.0.tgz.
+
+2. You check the mapping: do i already know the digest for this request ?
+
+- If yes, check blob store for that digest and stream it.
+
+- If no, fetch from upstream, compute digest, store blob under digest, and record mapping
+  <repoKey>/<path> -> digest.
+
+
+procedure: do i already know the digest for this request ?
+
+// Pseudocode
+digest, ok := mappingStore.Lookup(repoKey, path)
+if ok {
+    if blobs.Exists(ctx, digest) {
+        return blobs.Get(ctx, digest) // serve from cache
+    }
+}
+
+-  mappingStore.Lookup(repoKey, path)
+
+/tmp/filestore/<path> -> digest
