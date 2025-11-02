@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -47,21 +48,29 @@ func (r *DebianRemoteHandler) handleDebianRequest(c *gin.Context) {
 		"repo_key": repoKey,
 		"path":     rest,
 	}).Info("Handling Debian request")
+
+	repoConfig, ok := r.store.Get(repoKey)
+	if !ok {
+		c.JSON(404, gin.H{
+			"error": "Repository not found",
+		})
+		return
+	}
 	switch {
 	case strings.Contains(rest, "dists/") && strings.HasSuffix(rest, "InRelease"):
-		r.handleInRelease(c, repoKey, rest)
+		r.handleInRelease(c, repoKey, rest, &repoConfig)
 	case strings.Contains(rest, "dists/") && strings.HasSuffix(rest, "Release"):
-		r.handleRelease(c, repoKey, rest)
+		r.handleRelease(c, repoKey, rest, &repoConfig)
 	case strings.Contains(rest, "dists/") && strings.HasSuffix(rest, "Release.gpg"):
-		r.handleReleaseGPG(c, repoKey, rest)
+		r.handleReleaseGPG(c, repoKey, rest, &repoConfig)
 	case strings.Contains(rest, "dists/") && strings.HasSuffix(rest, "Packages"):
-		r.handlePackages(c, repoKey, rest)
+		r.handlePackages(c, repoKey, rest, &repoConfig)
 	case strings.Contains(rest, "dists/") && strings.HasSuffix(rest, "Packages.gz"):
-		r.handlePackagesGz(c, repoKey, rest)
+		r.handlePackagesGz(c, repoKey, rest, &repoConfig)
 	case strings.Contains(rest, "dists/") && strings.HasSuffix(rest, "Packages.xz"):
-		r.handlePackagesXz(c, repoKey, rest)
+		r.handlePackagesXz(c, repoKey, rest, &repoConfig)
 	case strings.Contains(rest, "pool/"):
-		r.handlePool(c, repoKey, rest)
+		r.handlePool(c, repoKey, rest, &repoConfig)
 	default:
 		c.JSON(404, gin.H{
 			"error": "Not Found",
@@ -69,39 +78,39 @@ func (r *DebianRemoteHandler) handleDebianRequest(c *gin.Context) {
 	}
 }
 
-func (r *DebianRemoteHandler) handleInRelease(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handleInRelease(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling InRelease for repoKey=%s, path=%s", repoKey, path)
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	r.writeResponse(c, resp)
 }
 
-func (r *DebianRemoteHandler) handleRelease(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handleRelease(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling Release for repoKey=%s, path=%s", repoKey, path)
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	r.writeResponse(c, resp)
 }
 
-func (r *DebianRemoteHandler) handleReleaseGPG(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handleReleaseGPG(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling ReleaseGPG for repoKey=%s, path=%s", repoKey, path)
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	r.writeResponse(c, resp)
 }
 
-func (r *DebianRemoteHandler) handlePackages(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handlePackages(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling Packages for repoKey=%s, path=%s", repoKey, path)
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	r.writeResponse(c, resp)
 }
 
-func (r *DebianRemoteHandler) handlePackagesGz(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handlePackagesGz(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling PackagesGz for repoKey=%s, path=%s", repoKey, path)
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	r.writeResponse(c, resp)
 }
 
-func (r *DebianRemoteHandler) handlePackagesXz(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handlePackagesXz(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling PackagesXz for repoKey=%s, path=%s", repoKey, path)
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	r.writeResponse(c, resp)
 }
 
@@ -131,8 +140,16 @@ func (r *DebianRemoteHandler) getFile(repoKey, path string) (bool, io.ReadCloser
 	return true, blobReader, nil
 }
 
-func (r *DebianRemoteHandler) handlePool(c *gin.Context, repoKey, path string) {
+func (r *DebianRemoteHandler) handlePool(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) {
 	log.Infof("Handling Pool for repoKey=%s, path=%s", repoKey, path)
+	if repoConfig == nil {
+		handleError(c, 404, "repository not found")
+		return
+	}
+	if repoConfig.PackageType.String() != "debian-remote" {
+		handleError(c, 400, "repository is not of type debian-remote")
+		return
+	}
 
 	// Check if file exists in local filestore
 	found, blobReader, err := r.getFile(repoKey, path)
@@ -159,7 +176,7 @@ func (r *DebianRemoteHandler) handlePool(c *gin.Context, repoKey, path string) {
 	log.Infof("File not found in local filestore; fetching from upstream: repoKey=%s, path=%s", repoKey, path)
 
 	// 1. Forward the request upstream
-	resp := r.forwardRequest(c, repoKey, path)
+	resp := r.forwardRequest(c, repoKey, path, repoConfig)
 	if resp == nil {
 		log.Errorf("Error forwarding request for blob: repoKey=%s, path=%s", repoKey, path)
 		handleError(c, 500, "failed to forward request")
@@ -236,11 +253,12 @@ func handleError(c *gin.Context, status int, message string) {
 	})
 }
 
-func (r *DebianRemoteHandler) forwardRequest(c *gin.Context, repoKey, path string) *http.Response {
+func (r *DebianRemoteHandler) forwardRequest(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) *http.Response {
 	reqClone := c.Request.Clone(c.Request.Context())
 	// Rewrite the request URL to point to the upstream Debian repository
+	reqClone.URL, _ = url.Parse(repoConfig.RemoteURL)
 	reqClone.URL.Scheme = "https"
-	reqClone.URL.Host = "deb.debian.org"
+	reqClone.URL.Host = reqClone.URL.Host
 	reqClone.URL.Path = strings.TrimPrefix(reqClone.URL.Path, "/debian/"+repoKey+"/")
 	log.Infof("Proxying request to upstream URL: %s", reqClone.URL.String())
 	log.Infof("Handling InRelease for repoKey=%s, path=%s", repoKey, path)

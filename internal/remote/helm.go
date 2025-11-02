@@ -22,13 +22,23 @@ import (
 type HelmRepoHandler struct {
 	blobs blobs.BlobStore
 	store *configstore.RepoConfigStore
+
+	// Delegates for test injection
+	onRedirect func(*gin.Context)
+	onIndex    func(*gin.Context)
+	onChart    func(*gin.Context)
 }
 
 func NewHelmRepoHandler(blobs blobs.BlobStore, store *configstore.RepoConfigStore) *HelmRepoHandler {
-	return &HelmRepoHandler{
+	h := &HelmRepoHandler{
 		blobs: blobs,
 		store: store,
 	}
+	// default to real methods
+	h.onRedirect = h.handleRedirectedChartFile
+	h.onIndex = h.handleIndex
+	h.onChart = h.handleChartFile
+	return h
 }
 
 func (h *HelmRepoHandler) Register(c *gin.Engine) {
@@ -47,11 +57,11 @@ func (h *HelmRepoHandler) handleHelmRequest(c *gin.Context) {
 	}).Info("Handling Helm request")
 	switch {
 	case strings.Contains(rest, "external/https"):
-		h.handleRedirectedChartFile(c)
+		h.onRedirect(c)
 	case strings.Contains(rest, "index.yaml") && strings.HasSuffix(rest, "index.yaml"):
-		h.handleIndex(c)
+		h.onIndex(c)
 	case strings.HasSuffix(rest, ".tgz") || strings.HasSuffix(rest, ".tar.gz"):
-		h.handleChartFile(c)
+		h.onChart(c)
 	default:
 		c.String(404, "not found")
 	}
