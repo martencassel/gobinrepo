@@ -1,0 +1,1611 @@
+apiVersion: v1
+entries:
+  cloudnative-pg:
+  - apiVersion: v2
+    appVersion: 1.27.1
+    created: "2025-10-23T15:41:36.245833232Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 86469a4ac7b9e806602d7e0e45a8e17f08d7ca27cc55b45d5b084e084ea4a075
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.26.1/cloudnative-pg-0.26.1.tgz
+    version: 0.26.1
+  - apiVersion: v2
+    appVersion: 1.27.0
+    created: "2025-08-13T08:56:23.284458815Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: e549b68877c78d645a1084f04dbae157a9cd85778c7476c87a07fc9c4b1398e2
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.26.0/cloudnative-pg-0.26.0.tgz
+    version: 0.26.0
+  - apiVersion: v2
+    appVersion: 1.26.1
+    created: "2025-07-25T12:32:21.178562464Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 1437646e7203de0626bdc54633654cdba3a17a27bd4a6cec5ed3afeb15006afc
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.25.0/cloudnative-pg-0.25.0.tgz
+    version: 0.25.0
+  - apiVersion: v2
+    appVersion: 1.26.0
+    created: "2025-05-23T13:20:02.750702306Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 30d4a809dc734ad7cb87190a2e14ab4f18ca5ce9ab2e7a05cf2fc48a015be853
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.24.0/cloudnative-pg-0.24.0.tgz
+    version: 0.24.0
+  - apiVersion: v2
+    appVersion: 1.25.1
+    created: "2025-03-05T14:15:49.173195912Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 940300b9c16cc98c819f248ed6f8a347bd872201da59717df580072071d7f276
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.23.2/cloudnative-pg-0.23.2.tgz
+    version: 0.23.2
+  - apiVersion: v2
+    appVersion: 1.25.0
+    created: "2025-03-04T13:08:40.259480784Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 9db75eb5002e0e71f13fa958cfd8edb0f33449990b2852962dd64ebf948d61e2
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.23.1/cloudnative-pg-0.23.1.tgz
+    version: 0.23.1
+  - apiVersion: v2
+    appVersion: 1.25.0
+    created: "2024-12-23T17:30:17.023265966Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: a7ac3a9b0d5fe754819e0877fb2f1b0921e3f5009a25cbec876f6a147dffbb3e
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.23.0/cloudnative-pg-0.23.0.tgz
+    version: 0.23.0
+  - apiVersion: v2
+    appVersion: 1.25.0-rc1
+    created: "2024-12-18T16:05:16.278642756Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 38aa1253d2cf7d6b39e003bcfc8cac97344f03454b28e8576cdc69b9b1771ddb
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.23.0-rc1/cloudnative-pg-0.23.0-rc1.tgz
+    version: 0.23.0-rc1
+  - apiVersion: v2
+    appVersion: 1.25.0-rc1
+    created: "2024-12-19T09:09:19.628287577Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: f889f260c921332ccb9e133adaf2b00c8cae966c39fa8ed2f3a64b7ee5fd5257
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.23.0-rc1/cloudnative-pg-0.23.0-rc1.tgz
+    version: 0.23.0-rc1
+  - apiVersion: v2
+    appVersion: 1.24.1
+    created: "2024-10-17T11:47:53.97292326Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 97273937fec707fdf2b84bc57205fa2e9d21d170fcc22e9ee36c1a8bc7542f30
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.22.1/cloudnative-pg-0.22.1.tgz
+    version: 0.22.1
+  - apiVersion: v2
+    appVersion: 1.24.0
+    created: "2024-08-22T15:50:22.325642975Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: fa0fbb5aa9dc779a44dbed2f2c97aed90e8379d5b11a529d7ec76d9cdd12a9ab
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.22.0/cloudnative-pg-0.22.0.tgz
+    version: 0.22.0
+  - apiVersion: v2
+    appVersion: 1.23.3
+    created: "2024-07-30T11:19:22.34921515Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 490d1be1ab4be6cc2a44d05ae8238fbd4df3c44cda6a449fe03c64b2bf4eb26e
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.6/cloudnative-pg-0.21.6.tgz
+    version: 0.21.6
+  - apiVersion: v2
+    appVersion: 1.23.2
+    created: "2024-06-13T14:01:15.397082966Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 49029e400e98c79d38aad574ee0fd2c34c600908d3b58578a7c17453676df520
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.5/cloudnative-pg-0.21.5.tgz
+    version: 0.21.5
+  - apiVersion: v2
+    appVersion: 1.23.1
+    created: "2024-05-30T17:21:35.311267796Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 28cf8be372f2739b47ffebe32fad2e7c09ac39fcd882668b46c1a8504212b76e
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.4/cloudnative-pg-0.21.4.tgz
+    version: 0.21.4
+  - apiVersion: v2
+    appVersion: 1.23.1
+    created: "2024-05-30T09:46:04.452676835Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: ba75dfc3f6b905a590c90280f361cfe1e2e59f45240738bd7d23f4bac0720beb
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.3/cloudnative-pg-0.21.3.tgz
+    version: 0.21.3
+  - apiVersion: v2
+    appVersion: 1.23.1
+    created: "2024-04-30T13:27:40.776044384Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: 7ab2da0cc4b8f562df0b493b8a58503c90d718557ab432d0c8ef400cbd7bf8ee
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.2/cloudnative-pg-0.21.2.tgz
+    version: 0.21.2
+  - apiVersion: v2
+    appVersion: 1.23.0
+    created: "2024-04-27T14:37:05.72111894Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: b3601b54832c4e3b3cd601ff18586cd76da0b22281247dffb5fca3b90346c058
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.1/cloudnative-pg-0.21.1.tgz
+    version: 0.21.1
+  - apiVersion: v2
+    appVersion: 1.23.0
+    created: "2024-04-25T11:45:29.17490135Z"
+    dependencies:
+    - alias: monitoring
+      condition: monitoring.grafanaDashboard.create
+      name: cluster
+      repository: https://cloudnative-pg.github.io/grafana-dashboards
+      version: "0.0"
+    description: CloudNativePG Operator Helm Chart
+    digest: c431b29a2d9493b8c29fe750e80859b3a12f3c61a7cee84df6536cfce99e8fc1
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.21.0/cloudnative-pg-0.21.0.tgz
+    version: 0.21.0
+  - apiVersion: v2
+    appVersion: 1.22.2
+    created: "2024-03-14T17:32:23.300008596Z"
+    description: CloudNativePG Operator Helm Chart
+    digest: b3ec7cdced059cd98d61932be546d7233a28b27d28a5f2fd9c076d54998be3bb
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - operator
+    - controller
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cloudnative-pg-v0.20.2/cloudnative-pg-0.20.2.tgz
+    version: 0.20.2
+  - apiVersion: v2
+    appVersion: 1.22.1
+    created: "2024-02-05T12:14:46.301336423Z"
+    description: CloudNativePG Helm Chart
+    digest: c9fd95e3a56241d99f6a27f801488e6d70dfdd9bcd0e49420f28847d9377414d
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.20.1.tgz
+    version: 0.20.1
+  - apiVersion: v2
+    appVersion: 1.22.0
+    created: "2023-12-21T13:59:37.754842653Z"
+    description: CloudNativePG Helm Chart
+    digest: 44d55c35d46a08b79c4b158005363ae9b4f07640afede9133c4776000893f786
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.20.0.tgz
+    version: 0.20.0
+  - apiVersion: v2
+    appVersion: 1.21.1
+    created: "2023-11-03T14:54:54.930203016Z"
+    description: CloudNativePG Helm Chart
+    digest: 9ed9734d81f40157270826ed8f5e3d3586fc51bbc6c17f8dc25d2694a8d8a630
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.19.1.tgz
+    version: 0.19.1
+  - apiVersion: v2
+    appVersion: 1.21.0
+    created: "2023-10-19T10:52:04.184920754Z"
+    description: CloudNativePG Helm Chart
+    digest: 309b310b03079273f34d68b80138929cf06ba784d88e95e04eef4b188662ab51
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.19.0.tgz
+    version: 0.19.0
+  - apiVersion: v2
+    appVersion: 1.20.2
+    created: "2023-07-27T14:01:29.734946092Z"
+    description: CloudNativePG Helm Chart
+    digest: 8709ac9d4df50efaa0fd15e3e2abca494ff7b674cac11f491e284f7474efb8ec
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.18.2.tgz
+    version: 0.18.2
+  - apiVersion: v2
+    appVersion: 1.20.1
+    created: "2023-06-13T09:54:08.142731475Z"
+    description: CloudNativePG Helm Chart
+    digest: afeae6a314bf81eded0bf6d8fb19a7781c6a76021e0351575dd6e34629ce42eb
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.18.1.tgz
+    version: 0.18.1
+  - apiVersion: v2
+    appVersion: 1.20.0
+    created: "2023-06-09T14:29:02.983294969Z"
+    description: CloudNativePG Helm Chart
+    digest: bee8133154b041f5cab2473ba9e116d1b251810dc68d8d6a1f6db61c44caa968
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.18.0.tgz
+    version: 0.18.0
+  - apiVersion: v2
+    appVersion: 1.19.1
+    created: "2023-04-25T18:30:23.630345046Z"
+    description: CloudNativePG Helm Chart
+    digest: e763d09edd35ec84923e0f9ed206f6c164fc93a2ca6b3b7557bb6fb97f459165
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.17.2.tgz
+    version: 0.17.2
+  - apiVersion: v2
+    appVersion: 1.19.1
+    created: "2023-03-20T15:37:42.106595231Z"
+    description: CloudNativePG Helm Chart
+    digest: ca5ea6b0f550a15d978b21437e2713f4b39521058c3908f8d28c5b711961b9e7
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.17.1.tgz
+    version: 0.17.1
+  - apiVersion: v2
+    appVersion: 1.19.0
+    created: "2023-02-15T16:42:37.632394903Z"
+    description: CloudNativePG Helm Chart
+    digest: 181f5cfe8293d8a23e8e013496d3d16900128539cc9c727e27b16f45edb17b1c
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.17.0.tgz
+    version: 0.17.0
+  - apiVersion: v2
+    appVersion: 1.18.1
+    created: "2022-12-21T15:38:57.758137728Z"
+    description: CloudNativePG Helm Chart
+    digest: 69d858f50d18dec7c0a7d6cccfa3663493c0d1bb30d1f5d7d5e3822845fa4701
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.16.1.tgz
+    version: 0.16.1
+  - apiVersion: v2
+    appVersion: 1.18.0
+    created: "2022-11-11T12:08:48.441011269Z"
+    description: CloudNativePG Helm Chart
+    digest: 6c9190f2692b74c1158b89293471c9b41c2bcf80843077554b9f46554a5a1780
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.16.0.tgz
+    version: 0.16.0
+  - apiVersion: v2
+    appVersion: 1.17.1
+    created: "2022-10-07T10:36:28.956132657Z"
+    description: CloudNativePG Helm Chart
+    digest: 31fdbc370c7a815003b1038693253b33547fccb0a813aa32ee2a2398fe406871
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.15.1.tgz
+    version: 0.15.1
+  - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2022-09-07T12:59:13.991145406Z"
+    description: CloudNativePG Helm Chart
+    digest: ee7b62c8b2b3157e1d640e41bdc23ccd58095a330abbb03df5e85e00ed71af47
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.15.0.tgz
+    version: 0.15.0
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2022-08-24T12:21:35.618929613Z"
+    description: CloudNativePG Helm Chart
+    digest: 43e4189512ae0535136beb39259a5e0ca138081adadc36d6a82de389241c518c
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.14.3.tgz
+    version: 0.14.3
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2022-08-16T17:56:00.989981541Z"
+    description: CloudNativePG Helm Chart
+    digest: 5c37ecf3a31aec5ec7a617bd43cbbb1b18dab90bca72079038bf33be4a05168b
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.14.2.tgz
+    version: 0.14.2
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2022-08-16T15:46:49.366971692Z"
+    description: CloudNativePG Helm Chart
+    digest: c151aeb40b1aaa8637b8d72bdaca7b6e6447e843bc72a8906a3b25212d9e1ed3
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.14.1.tgz
+    version: 0.14.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-07-12T16:58:42.678868272Z"
+    description: CloudNativePG Helm Chart
+    digest: 047177f0deca652e0f794855bf2c7b3260a6761cf6688b5fac895cf3793714d7
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.14.0.tgz
+    version: 0.14.0
+  - apiVersion: v2
+    appVersion: 1.15.1
+    created: "2022-05-28T07:11:37.266679893Z"
+    description: CloudNativePG Helm Chart
+    digest: 77f57fc327b6c4662a11f3b4f8d6d8362bc0d9e30541defaa26da66420b912cb
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.13.1.tgz
+    version: 0.13.1
+  - apiVersion: v2
+    appVersion: 1.15.0
+    created: "2022-05-28T07:09:59.489299353Z"
+    description: CloudNativePG Helm Chart
+    digest: add055e89c87863ac8234ce7311586354da6a8ee3ed4e8b13763cdb3405f37b3
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cloudnative-pg
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cloudnative-pg-0.13.0.tgz
+    version: 0.13.0
+  cluster:
+  - apiVersion: v2
+    created: "2025-04-29T19:57:16.953544116Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: e3567817bdcc8a6285c3cc54a2f12ba2cfe7f6c0144b35d231d2c106aa436d99
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.3.1/cluster-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    created: "2025-04-10T11:28:44.658972525Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 76eee4c61afa1b33a868dde0dded21cb71928d5af1c0c60d5513058f68d225ac
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.3.0/cluster-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    created: "2025-02-02T03:55:35.148086927Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 5381ad1600ae0845e95c5b649273c44c1c0df42bf4a0847d2be63a7393beea62
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.2.1/cluster-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    created: "2025-01-07T17:56:24.484099877Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 4609e9eba121306b8c198341746ac87fa402b2e74477358ab0aa3d4ece5ae50e
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.2.0/cluster-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    created: "2024-12-17T18:29:21.269470595Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 64a0c1f838a869a65160dbb61371aa394f85cee2cff7011ee4ae936c29bb3465
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.1.3/cluster-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    created: "2024-12-17T13:16:45.675826469Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: e8b23d9325e7ff689ea54c0c5ea81fe0ecb919909fa2c5e9b2e97984201087b2
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.1.2/cluster-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    created: "2024-12-07T17:03:43.144425095Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 2774fa58c0cbe106086cd20f14c508b0f1097bd51299d7df36f211bb289a3992
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.1.1/cluster-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    created: "2024-10-24T16:13:16.1219325Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 302caf4257d1165fac11323c83ed642f045ef4d0a2d0673a1ce9b11ba891caa2
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.1.0/cluster-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    created: "2024-09-03T10:04:10.877962491Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 477b0c4767aa4e1a010d7107bfdf584ed24b8f181d3595186d96990ce478f8e9
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.11/cluster-0.0.11.tgz
+    version: 0.0.11
+  - apiVersion: v2
+    created: "2024-08-28T18:00:54.888759341Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: c9f8769d917f62decb371636ab8fe4356a9d224a066dddb5d79e3d1660829b95
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.10/cluster-0.0.10.tgz
+    version: 0.0.10
+  - apiVersion: v2
+    created: "2024-05-25T17:08:48.829339666Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: dff863dff40016bee789d9821256c07cd7f8976800f523957263ce7690d623fe
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.9/cluster-0.0.9.tgz
+    version: 0.0.9
+  - apiVersion: v2
+    created: "2024-04-19T11:20:38.755299853Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 34d04775f7bdba50c06d25f2dac06247343da2c336eb8c805cf9cb78787b27cc
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.8/cluster-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v2
+    created: "2024-04-03T10:23:59.644956114Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 7b0acd140565406a4b9e94143c04f0b0e480508abfbd35b6196ce86c54165dd6
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.7/cluster-0.0.7.tgz
+    version: 0.0.7
+  - apiVersion: v2
+    created: "2024-04-01T13:08:01.763370784Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: ed67e602f15e9a564fe796faa2567cba30e083c82e901171f85aa36aacea6d13
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.6/cluster-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    created: "2024-03-27T15:49:10.499504536Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: c3d47dda8d687385c558c4159e09c9383c759e69ac1c14a6bd78c777a693ad16
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.5/cluster-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v2
+    created: "2024-03-27T15:04:46.616636641Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 6293c2975d448c96baef595c07e9004a811d0b804a24f6d8946b70f5a0449d84
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.4/cluster-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    created: "2024-03-17T16:57:25.714392623Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: e433a62d50a19a88ad7366250f361cac285226f6ba15703498efcb3bc0fb5511
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.3/cluster-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    created: "2024-03-01T10:25:03.127120002Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 90cf5810381e4007cacede59453c9655118c5fb8260c9e57e9050d0389a6a08f
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.2/cluster-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    created: "2024-02-21T21:08:00.406584001Z"
+    description: Deploys and manages a CloudNativePG cluster and its associated resources.
+    digest: 7d7a3355797856ff072cc6ccea68490fe5e3431697f9d7115f4453f65bd772fa
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: itay+cloudnativepg-charts+github.com@grudev.com
+      name: itay-grudev
+    name: cluster
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/cluster-v0.0.1/cluster-0.0.1.tgz
+    version: 0.0.1
+  cnpg-sandbox:
+  - apiVersion: v2
+    appVersion: 1.17.1
+    created: "2022-11-11T12:08:48.472018437Z"
+    dependencies:
+    - condition: cloudnative-pg.enabled
+      name: cloudnative-pg
+      repository: https://cloudnative-pg.github.io/charts
+      version: 0.15.1
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 32.2.1
+    description: A sandbox for CloudNativePG
+    digest: 01945da6e65a2f953c1df07891814f9ee99f5be3478d74796a109a8689725cd1
+    home: https://cloudnative-pg.io
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - monitoring
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cnpg-sandbox
+    sources:
+    - https://github.com/cloudnative-pg/cnpg-sandbox
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cnpg-sandbox-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2022-10-07T10:03:01.314549264Z"
+    dependencies:
+    - condition: cloudnative-pg.enabled
+      name: cloudnative-pg
+      repository: https://cloudnative-pg.github.io/charts
+      version: 0.15.0
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 32.2.1
+    description: A sandbox for CloudNativePG
+    digest: 995dbe69260305343b5e739f498566d1ba4ae895a6792e231d073fc6ea91f79b
+    home: https://cloudnative-pg.io
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - monitoring
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cnpg-sandbox
+    sources:
+    - https://github.com/cloudnative-pg/cnpg-sandbox
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cnpg-sandbox-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2022-09-07T11:48:41.438797176Z"
+    dependencies:
+    - condition: cloudnative-pg.enabled
+      name: cloudnative-pg
+      repository: https://cloudnative-pg.github.io/charts
+      version: 0.14.3
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 32.2.1
+    description: A sandbox for CloudNativePG
+    digest: e2d1e269328e24b4db4151696e3580cc27be28953cf9ba0e43bef3c8c94b4307
+    home: https://cloudnative-pg.io
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - monitoring
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cnpg-sandbox
+    sources:
+    - https://github.com/cloudnative-pg/cnpg-sandbox
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cnpg-sandbox-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-08-18T08:34:31.486671565Z"
+    dependencies:
+    - condition: cloudnative-pg.enabled
+      name: cloudnative-pg
+      repository: https://cloudnative-pg.github.io/charts
+      version: 0.14.0
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 32.2.1
+    description: A sandbox for CloudNativePG
+    digest: c274de72fb48ec68353c38690d2ca4471e4e0c059a0613bc6db52d3d046787be
+    home: https://cloudnative-pg.io
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - monitoring
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cnpg-sandbox
+    sources:
+    - https://github.com/cloudnative-pg/cnpg-sandbox
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cnpg-sandbox-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-07-11T11:25:28.726104292Z"
+    dependencies:
+    - condition: cloudnative-pg.enabled
+      name: cloudnative-pg
+      repository: https://cloudnative-pg.github.io/charts
+      version: 0.13.1
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 32.2.1
+    description: A sandbox for CloudNativePG
+    digest: 33f18bdf5992b813275aa100f128049c431a425672e09a6400f9cbfce6cbd715
+    home: https://cloudnative-pg.io
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - monitoring
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cnpg-sandbox
+    sources:
+    - https://github.com/cloudnative-pg/cnpg-sandbox
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cnpg-sandbox-0.4.1.tgz
+    version: 0.4.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-05-28T07:09:59.519121327Z"
+    dependencies:
+    - condition: cloudnative-pg.enabled
+      name: cloudnative-pg
+      repository: file://../cloudnative-pg
+      version: 0.13.0
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 32.2.1
+    description: A sandbox for CloudNativePG
+    digest: cc77786b943f8c4464dafcad9bcfa289e897a14639403bae5179a085ec016d55
+    home: https://cloudnative-pg.io
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - monitoring
+    maintainers:
+    - email: p.scorsolini@gmail.com
+      name: phisco
+    name: cnpg-sandbox
+    sources:
+    - https://github.com/cloudnative-pg/cnpg-sandbox
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/cnpg-sandbox-0.4.0.tgz
+    version: 0.4.0
+  pgbench:
+  - apiVersion: v2
+    created: "2022-11-11T12:08:48.472656938Z"
+    description: A Helm chart that starts a CNPG Cluster and executes a PgBench job
+      on it.
+    digest: 97cff26e1b1724fcc22af3f6451e219b3dde599412a71244eb80ff7f8100f257
+    home: https://cloudnative-pg.io
+    maintainers:
+    - email: jitendra.wadle@enterprisedb.com
+      name: Jitendra
+    name: pgbench
+    sources:
+    - https://github.com/cloudnative-pg/charts
+    type: application
+    urls:
+    - https://cloudnative-pg.github.io/charts/pgbench-0.1.0.tgz
+    version: 0.1.0
+  plugin-barman-cloud:
+  - apiVersion: v2
+    appVersion: v0.7.0
+    created: "2025-10-03T02:17:17.026770829Z"
+    description: Helm Chart for CloudNativePG's CNPG-I backup plugin using Barman
+      Cloud
+    digest: fac1326ebe5fc1bb17d14a7f62810a8cdab51d7c50186d316fcca36b03c6e8d2
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - barman
+    - cloud
+    - backup
+    - postgresql
+    - postgres
+    - database
+    - cloudnativepg
+    - cloudnative-pg
+    maintainers:
+    - email: itay@verito.digital
+      name: itay-grudev
+    - email: thibaud.vaisseau@gmail.com
+      name: quantumenigmaa
+    - email: quentin.bisson@gmail.com
+      name: quentinbisson
+    name: plugin-barman-cloud
+    sources:
+    - https://github.com/cloudnative-pg/plugin-barman-cloud
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/plugin-barman-cloud-v0.2.0/plugin-barman-cloud-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: v0.5.0
+    created: "2025-10-02T14:41:27.648294764Z"
+    description: Helm Chart for CloudNativePG's CNPG-I backup plugin using Barman
+      Cloud
+    digest: a0c68d57ab50d6aee7f1ede51ecc634efcc796d5f60afcc188a454c0bcea1b69
+    home: https://cloudnative-pg.io
+    icon: https://raw.githubusercontent.com/cloudnative-pg/artwork/main/cloudnativepg-logo.svg
+    keywords:
+    - barman
+    - cloud
+    - backup
+    - postgresql
+    - postgres
+    - database
+    - cloudnativepg
+    - cloudnative-pg
+    maintainers:
+    - email: itay@verito.digital
+      name: itay-grudev
+    - email: thibaud.vaisseau@gmail.com
+      name: quantumenigmaa
+    - email: quentin.bisson@gmail.com
+      name: quentinbisson
+    name: plugin-barman-cloud
+    sources:
+    - https://github.com/cloudnative-pg/plugin-barman-cloud
+    type: application
+    urls:
+    - https://github.com/cloudnative-pg/charts/releases/download/plugin-barman-cloud-v0.1.0/plugin-barman-cloud-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-10-23T15:41:36.416951615Z"

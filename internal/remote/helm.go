@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/martencassel/gobinrepo/internal/configstore"
 	"github.com/martencassel/gobinrepo/internal/util/blobs"
 	log "github.com/sirupsen/logrus"
+	repo "helm.sh/helm/v3/pkg/repo"
+	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 type HelmRepoHandler struct {
@@ -107,10 +110,68 @@ func (h *HelmRepoHandler) handleIndex(c *gin.Context) {
 		for _, vv := range v {
 			c.Writer.Header().Add(k, vv)
 		}
+	} // Create temp file
+	tempFile, err := os.CreateTemp("", "index.yaml")
+	if err != nil {
+		c.String(500, "failed to create temp file: %v", err)
+		return
 	}
+	defer os.Remove(tempFile.Name())
+
+	// Wrap the response body in a TeeReader
+	tee := io.TeeReader(res.Body, tempFile)
+
+	// Now stream to client while also writing to temp file
+	c.Status(res.StatusCode)
+	for k, v := range res.Header {
+		for _, vv := range v {
+			c.Writer.Header().Add(k, vv)
+		}
+	}
+	_, err = io.Copy(c.Writer, tee)
+	if err != nil {
+		log.Errorf("failed to copy response body: %v", err)
+		return
+	}
+
+	// At this point, tempFile contains a copy of the body
+	// You can parse it afterwards if you want:
+	if _, err := tempFile.Seek(0, io.SeekStart); err == nil {
+		indexFile, err := repo.LoadIndexFile(tempFile.Name())
+		if err == nil {
+			dump, _ := yaml.Marshal(indexFile)
+			log.Infof("Parsed index.yaml:\n%s", string(dump))
+
+			// ANSI color codes
+			const (
+				colorCyan  = "\033[36m"
+				colorGreen = "\033[32m"
+				colorReset = "\033[0m"
+			)
+
+			// Print with colors
+			log.Infof("%sParsed index.yaml:%s\n%s%s%s",
+				colorCyan, colorReset,
+				colorGreen, string(dump), colorReset,
+			)
+		}
+	}
+
+	// Now just forward the original response to the client
+	c.Status(res.StatusCode)
+	for k, v := range res.Header {
+		for _, vv := range v {
+			c.Writer.Header().Add(k, vv)
+		}
+	}
+	_, err = io.Copy(c.Writer, res.Body)
+	if err != nil {
+		log.Errorf("failed to copy response body: %v", err)
+	}
+
 	c.Status(res.StatusCode)
 	// Copy response body to client
-	_, err := io.Copy(c.Writer, res.Body)
+	_, err = io.Copy(c.Writer, res.Body)
 	if err != nil {
 		c.String(500, "failed to copy response body: %v", err)
 		return
