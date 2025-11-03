@@ -26,3 +26,8 @@ helm fetch cloudnative-pg/cnpg-operator
 ./run-ip.sh
 cd ./scripts/ && make
 
+# echo "deb [trusted=yes] http://192.168.1.100:8080/debian/debian stable main" > /etc/apt/sources.list 
+# rm -f /etc/apt/sources.list.d/debian.sources
+# apt update -y
+# apt-get install emacs -y
+
