@@ -1,0 +1,12 @@
+>>
+[galaxy]
+server_list = ansible-collections
+
+[galaxy_server.ansible-collections]
+url = http://localhost:5000/api/ansible/ansible-collections
+<<
+
+> ansible-galaxy collection install geerlingguy.k8s
+
+GET http://localhost:5000/api/ansible/ansible-collections/collections/geerlingguy/k8s/
+

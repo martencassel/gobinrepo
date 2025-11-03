@@ -21,6 +21,10 @@ remotes:
     remote_url: https://cloudnative-pg.github.io/charts
     package_type: helm
 
+  strimzihelm:
+    package_type: docker
+    remote_url: https://quay.io/strimzi-helm/strimzi-kafka-operator
+
   dockerhub:
     package_type: docker
     remote_url: https://registry-1.docker.io

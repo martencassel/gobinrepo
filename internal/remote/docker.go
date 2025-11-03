@@ -40,10 +40,6 @@ func (h *DockerRemoteHandler) RegisterRoutes(r *gin.Engine) {
 		c.Header("Docker-Distribution-API-Version", "registry/2.0")
 		c.Status(http.StatusOK)
 	})
-
-	// r.GET("/v2/:repoKey/*name/manifests/:ref", h.GetManifest)
-	// r.GET("/v2/:repoKey/*name/blobs/:digest", h.GetBlob)
-
 	r.GET("/v2/:repoKey/*path", h.handleV2)
 }
 

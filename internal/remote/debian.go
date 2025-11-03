@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -146,11 +145,6 @@ func (r *DebianRemoteHandler) handlePool(c *gin.Context, repoKey, path string, r
 		handleError(c, 404, "repository not found")
 		return
 	}
-	if repoConfig.PackageType.String() != "debian-remote" {
-		handleError(c, 400, "repository is not of type debian-remote")
-		return
-	}
-
 	// Check if file exists in local filestore
 	found, blobReader, err := r.getFile(repoKey, path)
 	if err != nil {
@@ -158,11 +152,6 @@ func (r *DebianRemoteHandler) handlePool(c *gin.Context, repoKey, path string, r
 	}
 	if found {
 		log.Infof("Serving file from local filestore: repoKey=%s, path=%s", repoKey, path)
-		if err := blobReader.Close(); err != nil {
-			log.Errorf("Error closing blob reader: %v", err)
-			handleError(c, 500, fmt.Sprintf("Failed to close blob reader: %v", err))
-			return
-		}
 		// Stream blob to response
 		_, err := io.Copy(c.Writer, blobReader)
 		if err != nil {
@@ -255,14 +244,11 @@ func handleError(c *gin.Context, status int, message string) {
 
 func (r *DebianRemoteHandler) forwardRequest(c *gin.Context, repoKey, path string, repoConfig *configstore.RepoConfig) *http.Response {
 	reqClone := c.Request.Clone(c.Request.Context())
-	// Rewrite the request URL to point to the upstream Debian repository
-	reqClone.URL, _ = url.Parse(repoConfig.RemoteURL)
-	reqClone.URL.Scheme = "https"
-	reqClone.URL.Host = reqClone.URL.Host
-	reqClone.URL.Path = strings.TrimPrefix(reqClone.URL.Path, "/debian/"+repoKey+"/")
-	log.Infof("Proxying request to upstream URL: %s", reqClone.URL.String())
-	log.Infof("Handling InRelease for repoKey=%s, path=%s", repoKey, path)
-	req, _ := http.NewRequest(reqClone.Method, reqClone.URL.String(), reqClone.Body)
+	// Remove /debian/<repoKey>/ prefix from path
+	path = strings.Replace(path, fmt.Sprintf("/debian/%s/", repoKey), "", 1)
+	remoteUrl := fmt.Sprintf("%s/%s", repoConfig.RemoteURL, path)
+	log.Infof("Forwarding request to upstream Debian repo: %s", remoteUrl)
+	req, _ := http.NewRequest(reqClone.Method, remoteUrl, reqClone.Body)
 	req.Header = reqClone.Header
 	client := &http.Client{}
 	resp, err := client.Do(req)

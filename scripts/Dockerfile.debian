@@ -4,5 +4,9 @@ FROM debian:12
 # ENV http_proxy=http://your-proxy-server:port
 # ENV https_proxy=http://your-proxy-server:port
 
-RUN echo "deb [trusted=yes] http://192.168.1.100:8080/debian/debian-remote/debian stable main" > /etc/apt/sources.list \
-    && apt-get update -y
+RUN apt update -y && apt install curl -y
+
+RUN echo "deb [trusted=yes] http://192.168.1.100:8080/debian/debian stable main" > /etc/apt/sources.list \
+    && rm -f /etc/apt/sources.list.d/debian.sources \
+    && apt-get update -y \
+    && apt-get install emacs -y
